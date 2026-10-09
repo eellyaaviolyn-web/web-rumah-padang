@@ -1,0 +1,37 @@
+# Node Dependencies
+node_modules/
+*/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Production Build Outputs
+dist/
+dist-ssr/
+frontend/dist/
+
+# Local Environment & Secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# Editor & System Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Agent & AI caches
+.agents/
+skills-lock.json
+
+# SQLite temporary journal files (keep warung_padang.sql dump for MySQL)
+*.db-journal
+backend/*.db-journal
