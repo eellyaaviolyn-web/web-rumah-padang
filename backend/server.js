@@ -31,6 +31,10 @@ app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Sajikan static files dari hasil build React frontend
+const frontendDistPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendDistPath));
+
 // 4. Rate Limiting Otomatis (Perlindungan Anti-Brute-Force & Anti-DDoS)
 const loginAttempts = new Map(); // ip -> { count, lockedUntil }
 const generalRequests = new Map(); // ip -> { count, resetTime }
@@ -839,6 +843,21 @@ app.get('/api/schema', requireAdmin, (req, res) => {
       });
     });
   }
+});
+
+// 16. Handler 404 untuk endpoint /api yang tidak terdaftar
+app.all('/api/*', (req, res) => {
+  res.status(404).json({ success: false, error: 'Endpoint API tidak ditemukan.' });
+});
+
+// 17. Fallback SPA: Sajikan index.html untuk semua navigasi halaman frontend
+app.get('*', (req, res) => {
+  const indexPath = path.join(frontendDistPath, 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      res.status(404).send('Warung Padang Backend API is active. Frontend build not found.');
+    }
+  });
 });
 
 app.listen(PORT, () => {
