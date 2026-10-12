@@ -84,15 +84,17 @@ const OFFICIAL_ACCOUNTS = [
   {
     username: process.env.ADMIN_USER || 'admin',
     password: process.env.ADMIN_PASSWORD || 'admin123',
-    nama: 'Ahmad Manager',
+    nama: 'Vinzkie',
+    no_telp: '0851-4741-3866',
     role: 'Admin',
-    badge: 'Admin Pengelola',
+    badge: 'Admin Pengelola (Vinzkie)',
     deskripsi: 'Akses penuh manajemen menu, staf, cabang & basis data'
   },
   {
     username: process.env.KASIR_USER || 'kasir',
     password: process.env.KASIR_PASSWORD || 'kasir123',
     nama: 'Rian Hendra (Kasir 1)',
+    no_telp: '0851-4741-3866',
     role: 'Kasir',
     badge: 'Kasir Utama POS',
     deskripsi: 'Akses antrean kasir, proses pesanan & cetak nota belanja'
@@ -100,9 +102,10 @@ const OFFICIAL_ACCOUNTS = [
   {
     username: process.env.OWNER_USER || 'owner',
     password: process.env.OWNER_PASSWORD || 'owner123',
-    nama: 'H. Dt. Palimo Kayo',
+    nama: 'Vinzkie',
+    no_telp: '0851-4741-3866',
     role: 'Owner',
-    badge: 'Pemilik & Direktur',
+    badge: 'Pemilik & Direktur (Vinzkie)',
     deskripsi: 'Akses eksekutif analisis omzet, laba bersih & laporan keuangan'
   }
 ];
@@ -308,6 +311,7 @@ app.post('/api/admin/login', (req, res) => {
       user: {
         username: matched.username,
         nama: matched.nama,
+        no_telp: matched.no_telp,
         role: matched.role,
         badge: matched.badge,
         deskripsi: matched.deskripsi,

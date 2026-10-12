@@ -43,9 +43,9 @@ export default function OwnerView({
   const [auditLogs, setAuditLogs] = useState([
     { id: 1, waktu: '12 Okt 2026 18:45', user: 'Rian Hendra', role: 'Kasir', aksi: 'Transaksi POS Tunai', detail: 'Memproses pesanan #BK-829102 sebesar Rp 56.000', ip: '192.168.1.15' },
     { id: 2, waktu: '12 Okt 2026 17:30', user: 'Rian Hendra', role: 'Kasir', aksi: 'Buka Laci Kasir (Cash In)', detail: 'Mencatat modal awal kembalian Rp 250.000', ip: '192.168.1.15' },
-    { id: 3, waktu: '12 Okt 2026 16:15', user: 'Ahmad Manager', role: 'Admin', aksi: 'Perubahan Harga Menu', detail: 'Ubah harga Rendang Daging dari Rp 27.000 ke Rp 28.000', ip: '192.168.1.10' },
+    { id: 3, waktu: '12 Okt 2026 16:15', user: 'Vinzkie', role: 'Admin', aksi: 'Perubahan Harga Menu', detail: 'Ubah harga Rendang Daging dari Rp 27.000 ke Rp 28.000', ip: '192.168.1.10' },
     { id: 4, waktu: '12 Okt 2026 14:00', user: 'Rian Hendra', role: 'Kasir', aksi: 'Pengajuan Void Transaksi', detail: 'Mengajukan pembatalan pesanan salah input #BK-771890 (Rp 84.000)', ip: '192.168.1.15' },
-    { id: 5, waktu: '12 Okt 2026 11:20', user: 'Ahmad Manager', role: 'Admin', aksi: 'Restock Bahan Supplier', detail: 'Catat barang masuk Daging Sapi 15 Kg dari PD. Berkah Senen', ip: '192.168.1.10' }
+    { id: 5, waktu: '12 Okt 2026 11:20', user: 'Vinzkie', role: 'Admin', aksi: 'Restock Bahan Supplier', detail: 'Catat barang masuk Daging Sapi 15 Kg dari PD. Berkah Senen', ip: '192.168.1.10' }
   ]);
 
   const [voidRequests, setVoidRequests] = useState([
@@ -77,7 +77,7 @@ export default function OwnerView({
       {
         id: Date.now(),
         waktu: new Date().toLocaleString('id-ID'),
-        user: 'H. Dt. Palimo Kayo',
+        user: 'Vinzkie',
         role: 'Owner',
         aksi: 'Otorisasi Void Disetujui',
         detail: `Menyetujui pembatalan pesanan #${voidRequests.find(v => v.id === requestId)?.nomorPesanan} (Rp ${voidRequests.find(v => v.id === requestId)?.nominal.toLocaleString('id-ID')})`,

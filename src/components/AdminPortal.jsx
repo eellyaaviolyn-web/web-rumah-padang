@@ -753,13 +753,13 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
               </div>
               <div className="overflow-hidden">
                 <div className="text-xs font-bold text-slate-900 truncate">
-                  {activeOperator?.nama || adminUser?.nama || (isKasir ? 'Rian Hendra' : isOwner ? 'H. Dt. Palimo Kayo' : 'Ahmad Manager')}
+                  {activeOperator?.nama || adminUser?.nama || (isKasir ? 'Rian Hendra' : 'Vinzkie')}
                 </div>
                 <div className={`text-[10px] font-bold flex items-center gap-1 ${
                   isKasir ? 'text-emerald-700' : isOwner ? 'text-purple-700' : 'text-[#a61c1c]'
                 }`}>
                   <ShieldCheck className="w-3 h-3 shrink-0" />
-                  <span className="truncate">{adminUser?.badge || (isKasir ? 'Kasir POS' : isOwner ? 'Owner Resto' : 'Admin Pengelola')}</span>
+                  <span className="truncate">{adminUser?.badge || (isKasir ? 'Kasir POS' : isOwner ? 'Owner Resto (Vinzkie)' : 'Admin Pengelola (Vinzkie)')}</span>
                 </div>
               </div>
             </div>
@@ -1495,12 +1495,14 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
               {/* Tanda Tangan */}
               <div className="pt-6 flex justify-between text-center text-xs">
                 <div>
-                  <p>Mengetahui,</p>
-                  <p className="font-bold mt-12 underline">Manajer Operasional</p>
+                  <p>Mengetahui & Menyetujui,</p>
+                  <p className="font-bold mt-12 underline">Vinzkie (Owner & Direktur Utama)</p>
+                  <p className="text-[10px] text-stone-500 font-mono">Telp / WA: 0851-4741-3866</p>
                 </div>
                 <div>
                   <p>Dicetak pada: {new Date().toLocaleDateString('id-ID')}</p>
-                  <p className="font-bold mt-12 underline">{activeOperator?.nama || 'Vinzkie'} (Kasir Utama)</p>
+                  <p className="font-bold mt-12 underline">{activeOperator?.nama || 'Vinzkie'} (Pengelola Restoran)</p>
+                  <p className="text-[10px] text-stone-500 font-mono">Masakan Padang ID</p>
                 </div>
               </div>
             </div>
