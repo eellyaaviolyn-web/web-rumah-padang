@@ -753,13 +753,13 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
               </div>
               <div className="overflow-hidden">
                 <div className="text-xs font-bold text-slate-900 truncate">
-                  {activeOperator?.nama || adminUser?.nama || (isKasir ? 'Rian Hendra' : 'Vinzkie')}
+                  {activeOperator?.nama || adminUser?.nama || (isKasir ? 'eellyaa' : 'Vinzkie')}
                 </div>
                 <div className={`text-[10px] font-bold flex items-center gap-1 ${
                   isKasir ? 'text-emerald-700' : isOwner ? 'text-purple-700' : 'text-[#a61c1c]'
                 }`}>
                   <ShieldCheck className="w-3 h-3 shrink-0" />
-                  <span className="truncate">{adminUser?.badge || (isKasir ? 'Kasir POS' : isOwner ? 'Owner Resto (Vinzkie)' : 'Admin Pengelola (Vinzkie)')}</span>
+                  <span className="truncate">{adminUser?.badge || (isKasir ? 'Kasir POS (eellyaa)' : isOwner ? 'Owner Resto (Vinzkie)' : 'Admin Pengelola (Vinzkie)')}</span>
                 </div>
               </div>
             </div>

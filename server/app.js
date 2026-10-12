@@ -93,10 +93,10 @@ const OFFICIAL_ACCOUNTS = [
   {
     username: process.env.KASIR_USER || 'kasir',
     password: process.env.KASIR_PASSWORD || 'kasir123',
-    nama: 'Rian Hendra (Kasir 1)',
+    nama: 'eellyaa',
     no_telp: '0851-4741-3866',
     role: 'Kasir',
-    badge: 'Kasir Utama POS',
+    badge: 'Kasir Utama POS (eellyaa)',
     deskripsi: 'Akses antrean kasir, proses pesanan & cetak nota belanja'
   },
   {

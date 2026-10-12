@@ -72,10 +72,10 @@ export default function AdminLogin({ onLoginSuccess, onBackToStore }) {
       } else if (u === 'kasir' && p === 'kasir123') {
         matchedOffline = {
           username: 'kasir',
-          nama: 'Rian Hendra (Kasir 1)',
+          nama: 'eellyaa',
           no_telp: '0851-4741-3866',
           role: 'Kasir',
-          badge: 'Kasir Utama POS',
+          badge: 'Kasir Utama POS (eellyaa)',
           deskripsi: 'Akses antrean kasir, proses pesanan & cetak nota belanja'
         };
       }

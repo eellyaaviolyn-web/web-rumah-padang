@@ -45,7 +45,7 @@ export default function KasirView({
       shift: 'Pagi (08.00 - 16.00)',
       waktuBuka: '08:00 WIB',
       modalAwal: 250000,
-      kasirNama: activeOperator?.nama || 'Rian Hendra (Kasir 1)'
+      kasirNama: activeOperator?.nama || 'eellyaa'
     };
   });
   const [cashDrawerPhysicalInput, setCashDrawerPhysicalInput] = useState('');
@@ -54,7 +54,7 @@ export default function KasirView({
       id: 1,
       tanggal: '2026-10-11',
       shift: 'Pagi (08.00 - 16.00)',
-      kasir: 'Rian Hendra',
+      kasir: 'eellyaa',
       modalAwal: 250000,
       penjualanTunai: 1650000,
       uangFisik: 1900000,
@@ -277,7 +277,7 @@ export default function KasirView({
       shift: 'Pagi (08.00 - 16.00)',
       waktuBuka: new Date().toLocaleTimeString('id-ID'),
       modalAwal: modalNum,
-      kasirNama: activeOperator?.nama || 'Rian Hendra'
+      kasirNama: activeOperator?.nama || 'eellyaa'
     };
     setCashDrawer(updated);
     setCashDrawerPhysicalInput('');
@@ -315,7 +315,7 @@ export default function KasirView({
                 </div>
                 <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold shrink-0">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>Kasir Aktif: {activeOperator?.nama || 'Rian Hendra'}</span>
+                  <span>Kasir Aktif: {activeOperator?.nama || 'eellyaa'}</span>
                 </div>
               </div>
 

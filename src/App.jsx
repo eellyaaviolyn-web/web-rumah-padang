@@ -218,10 +218,10 @@ export default function App() {
         setIsAdminAuthenticated(true);
         setAdminUser({
           username: u,
-          nama: role === 'Kasir' ? 'Rian Hendra (Kasir 1)' : 'Vinzkie',
+          nama: role === 'Kasir' ? 'eellyaa' : 'Vinzkie',
           no_telp: '0851-4741-3866',
           role: role,
-          badge: role === 'Owner' ? 'Pemilik & Direktur (Vinzkie)' : role === 'Kasir' ? 'Kasir Utama POS' : 'Admin Pengelola (Vinzkie)'
+          badge: role === 'Owner' ? 'Pemilik & Direktur (Vinzkie)' : role === 'Kasir' ? 'Kasir Utama POS (eellyaa)' : 'Admin Pengelola (Vinzkie)'
         });
         return;
       }
@@ -239,10 +239,10 @@ export default function App() {
         setIsAdminAuthenticated(true);
         setAdminUser({
           username: u,
-          nama: role === 'Kasir' ? 'Rian Hendra (Kasir 1)' : 'Vinzkie',
+          nama: role === 'Kasir' ? 'eellyaa' : 'Vinzkie',
           no_telp: '0851-4741-3866',
           role: role,
-          badge: role === 'Owner' ? 'Pemilik & Direktur (Vinzkie)' : role === 'Kasir' ? 'Kasir Utama POS' : 'Admin Pengelola (Vinzkie)'
+          badge: role === 'Owner' ? 'Pemilik & Direktur (Vinzkie)' : role === 'Kasir' ? 'Kasir Utama POS (eellyaa)' : 'Admin Pengelola (Vinzkie)'
         });
       } else {
         setIsAdminAuthenticated(false);

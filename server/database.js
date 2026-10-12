@@ -67,7 +67,7 @@ const memoryStore = {
     { id: 5, judul: 'Kotak Nasi Mika & Kertas Food-Grade', kategori: 'Kemasan', jumlah: 180000, tanggal: new Date().toISOString().split('T')[0], keterangan: 'Stok 200 pcs box nasi kotak catering' }
   ],
   staf: [
-    { id: 1, nama: 'Vinzkie', role: 'Kasir Utama & Supervisor POS', no_telp: '0851-4741-3866', status: 'Aktif', shift: 'Pagi (08.00 - 16.00)' },
+    { id: 1, nama: 'eellyaa', role: 'Kasir Utama POS', no_telp: '0851-4741-3866', status: 'Aktif', shift: 'Pagi (08.00 - 16.00)' },
     { id: 2, nama: 'Mak Etek Buyung', role: 'Kepala Koki Dapur Minang', no_telp: '0813-8877-6652', status: 'Aktif', shift: 'Pagi (08.00 - 16.00)' },
     { id: 3, nama: 'Sutan Bagindo', role: 'Juru Racik Rendang & Gulai', no_telp: '+62 851-4741-3866', status: 'Aktif', shift: 'Sore (14.00 - 22.00)' },
     { id: 4, nama: 'Zul Ilham', role: 'Kurir Pengantar Nasi Kotak', no_telp: '0819-6655-4432', status: 'Aktif', shift: 'Fleksibel Operasional' },

@@ -41,10 +41,10 @@ export default function OwnerView({
 
   // ================= 2. STATE AUDIT LOG & VOID PERSETUJUAN =================
   const [auditLogs, setAuditLogs] = useState([
-    { id: 1, waktu: '12 Okt 2026 18:45', user: 'Rian Hendra', role: 'Kasir', aksi: 'Transaksi POS Tunai', detail: 'Memproses pesanan #BK-829102 sebesar Rp 56.000', ip: '192.168.1.15' },
-    { id: 2, waktu: '12 Okt 2026 17:30', user: 'Rian Hendra', role: 'Kasir', aksi: 'Buka Laci Kasir (Cash In)', detail: 'Mencatat modal awal kembalian Rp 250.000', ip: '192.168.1.15' },
+    { id: 1, waktu: '12 Okt 2026 18:45', user: 'eellyaa', role: 'Kasir', aksi: 'Transaksi POS Tunai', detail: 'Memproses pesanan #BK-829102 sebesar Rp 56.000', ip: '192.168.1.15' },
+    { id: 2, waktu: '12 Okt 2026 17:30', user: 'eellyaa', role: 'Kasir', aksi: 'Buka Laci Kasir (Cash In)', detail: 'Mencatat modal awal kembalian Rp 250.000', ip: '192.168.1.15' },
     { id: 3, waktu: '12 Okt 2026 16:15', user: 'Vinzkie', role: 'Admin', aksi: 'Perubahan Harga Menu', detail: 'Ubah harga Rendang Daging dari Rp 27.000 ke Rp 28.000', ip: '192.168.1.10' },
-    { id: 4, waktu: '12 Okt 2026 14:00', user: 'Rian Hendra', role: 'Kasir', aksi: 'Pengajuan Void Transaksi', detail: 'Mengajukan pembatalan pesanan salah input #BK-771890 (Rp 84.000)', ip: '192.168.1.15' },
+    { id: 4, waktu: '12 Okt 2026 14:00', user: 'eellyaa', role: 'Kasir', aksi: 'Pengajuan Void Transaksi', detail: 'Mengajukan pembatalan pesanan salah input #BK-771890 (Rp 84.000)', ip: '192.168.1.15' },
     { id: 5, waktu: '12 Okt 2026 11:20', user: 'Vinzkie', role: 'Admin', aksi: 'Restock Bahan Supplier', detail: 'Catat barang masuk Daging Sapi 15 Kg dari PD. Berkah Senen', ip: '192.168.1.10' }
   ]);
 
@@ -52,7 +52,7 @@ export default function OwnerView({
     {
       id: 1,
       nomorPesanan: 'BK-771890',
-      pemohon: 'Rian Hendra (Kasir 1)',
+      pemohon: 'eellyaa (Kasir Utama)',
       alasan: 'Pelanggan salah memilih varian lauk dan meminta pembatalan nota sebelum dimasak',
       nominal: 84000,
       waktu: '12 Okt 2026 14:00 WIB',
