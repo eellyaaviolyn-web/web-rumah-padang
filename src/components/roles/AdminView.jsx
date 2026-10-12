@@ -162,69 +162,42 @@ export default function AdminView({
       {activeTab === 'dashboard_ops' && (
         <div className="space-y-6 animate-fadeIn">
           
-          {/* 1. HERO OPERATIONAL GREETING & RBAC BANNER */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#18100c] via-[#24140e] to-[#3a1a12] text-white p-6 sm:p-7 rounded-3xl border border-stone-800 shadow-xl">
-            <div className="absolute -right-12 -top-12 w-64 h-64 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute right-10 bottom-0 opacity-10 pointer-events-none hidden md:block">
-              <ChefHat className="w-48 h-48 text-amber-200" />
-            </div>
-
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
-              <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-bold text-amber-300">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Pusat Kendali Operasional Restoran & Dapur</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                </div>
-
-                <h2 className="font-serif font-black text-2xl sm:text-3xl text-white tracking-wide">
-                  Selamat Bertugas, <span className="text-[#f5d796]">{operatorName}</span>
+          {/* 1. HERO OPERATIONAL GREETING - CLEAN WHITE SAAS WITH WARM ACCENT */}
+          <div className="relative overflow-hidden bg-white text-stone-800 p-6 sm:p-7 rounded-3xl border border-stone-200/90 shadow-2xs">
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="space-y-2 max-w-2xl">
+                <h2 className="font-serif font-black text-2xl sm:text-3xl text-stone-900 tracking-wide">
+                  Selamat Bertugas, <span className="text-[#a61c1c]">{operatorName}</span>
                 </h2>
                 
-                <p className="text-xs sm:text-sm text-stone-300 max-w-2xl leading-relaxed">
+                <p className="text-xs sm:text-sm text-stone-500 leading-relaxed">
                   Dashboard terpadu untuk pengawasan 5 pilar operasional: katalog menu & harga, ketersediaan stok bahan baku, promo diskon, jaringan rekanan supplier, dan pantauan pesanan harian.
                 </p>
-
-                {/* Badge Hak Akses RBAC & Proteksi */}
-                <div className="pt-2 flex flex-wrap items-center gap-2.5 text-[11px]">
-                  <span className="px-2.5 py-1 rounded-xl bg-white/10 text-stone-200 border border-white/10 flex items-center gap-1.5">
-                    <Phone className="w-3 h-3 text-emerald-400" />
-                    <span>Kontak: <strong>{operatorPhone}</strong></span>
-                  </span>
-                  <span className="px-2.5 py-1 rounded-xl bg-emerald-950/60 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3 h-3" />
-                    <span>Akses Penuh Operasional & Gudang</span>
-                  </span>
-                  <span className="px-2.5 py-1 rounded-xl bg-amber-950/60 text-amber-300 border border-amber-500/30 flex items-center gap-1.5" title="Kebijakan keamanan sistem: Laba bersih & dividen hanya untuk Owner">
-                    <Lock className="w-3 h-3 text-amber-400" />
-                    <span>Laba Bersih & P&L Terproteksi Khusus Owner</span>
-                  </span>
-                </div>
               </div>
 
               {/* Box Quick Stat Hari Ini */}
-              <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 flex md:flex-col justify-between items-center md:items-end gap-3 shrink-0">
+              <div className="bg-stone-50/80 border border-stone-200/80 rounded-2xl p-4 sm:p-5 flex md:flex-col justify-between items-center md:items-end gap-3 shrink-0">
                 <div className="text-left md:text-right">
-                  <span className="text-[10px] uppercase tracking-wider text-stone-300 font-bold block">
+                  <span className="text-[10px] uppercase tracking-wider text-stone-500 font-bold block">
                     Total Pesanan Masuk
                   </span>
-                  <div className="font-mono font-black text-3xl text-[#f5d796]">
+                  <div className="font-mono font-black text-3xl text-stone-900">
                     {orders.length}
                   </div>
-                  <span className="text-[11px] text-emerald-300 font-semibold flex items-center gap-1 md:justify-end">
-                    <Clock className="w-3 h-3" />
+                  <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1 md:justify-end">
+                    <Clock className="w-3 h-3 text-emerald-600" />
                     <span>{activeCookingOrders.length} dalam proses aktif</span>
                   </span>
                 </div>
 
-                <div className="text-left md:text-right border-l md:border-l-0 md:border-t border-white/15 pl-4 md:pl-0 md:pt-3">
-                  <span className="text-[10px] uppercase tracking-wider text-stone-300 font-bold block">
+                <div className="text-left md:text-right border-l md:border-l-0 md:border-t border-stone-200 pl-4 md:pl-0 md:pt-3">
+                  <span className="text-[10px] uppercase tracking-wider text-stone-500 font-bold block">
                     Omzet Kasir Hari Ini
                   </span>
-                  <div className="font-mono font-bold text-lg sm:text-xl text-white">
+                  <div className="font-mono font-bold text-lg sm:text-xl text-[#a61c1c]">
                     Rp {totalOmzetHarian.toLocaleString('id-ID')}
                   </div>
-                  <span className="text-[10px] text-stone-300">Penjualan kotor kasir</span>
+                  <span className="text-[10px] text-stone-400">Penjualan kotor kasir</span>
                 </div>
               </div>
             </div>
