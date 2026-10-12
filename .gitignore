@@ -34,4 +34,4 @@ skills-lock.json
 
 # SQLite temporary journal files (keep warung_padang.sql dump for MySQL)
 *.db-journal
-backend/*.db-journal
+server/*.db-journal

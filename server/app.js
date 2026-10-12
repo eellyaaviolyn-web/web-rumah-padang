@@ -29,11 +29,11 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
-// Sajikan static files dari hasil build React frontend
-const frontendDistPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(frontendDistPath));
+// Sajikan static files dari hasil build React frontend di root dist
+const distPath = path.join(__dirname, '../dist');
+app.use(express.static(distPath));
 
 // 4. Rate Limiting Otomatis (Perlindungan Anti-Brute-Force & Anti-DDoS)
 const loginAttempts = new Map(); // ip -> { count, lockedUntil }
@@ -852,7 +852,7 @@ app.all('/api/*', (req, res) => {
 
 // 17. Fallback SPA: Sajikan index.html untuk semua navigasi halaman frontend
 app.get('*', (req, res) => {
-  const indexPath = path.join(frontendDistPath, 'index.html');
+  const indexPath = path.join(distPath, 'index.html');
   res.sendFile(indexPath, (err) => {
     if (err) {
       res.status(404).send('Warung Padang Backend API is active. Frontend build not found.');
@@ -860,10 +860,20 @@ app.get('*', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`===============================================`);
-  console.log(`🚀 Server Backend Bundo Kanduang Aktif!`);
-  console.log(`📡 URL API: http://localhost:${PORT}/api/menu`);
-  console.log(`🐬 Engine: ${db.getEngine()} (${db.getDatabaseName()})`);
-  console.log(`===============================================`);
-});
+const isDirectRun = process.argv[1] && (
+  fileURLToPath(import.meta.url) === path.resolve(process.argv[1]) ||
+  process.argv[1].endsWith('app.js') ||
+  process.argv[1].endsWith('server.js')
+);
+
+if (isDirectRun && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`===============================================`);
+    console.log(`🚀 Server Backend Bundo Kanduang Aktif!`);
+    console.log(`📡 URL API: http://localhost:${PORT}/api/menu`);
+    console.log(`🐬 Engine: ${db.getEngine()} (${db.getDatabaseName()})`);
+    console.log(`===============================================`);
+  });
+}
+
+export default app;
