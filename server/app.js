@@ -615,42 +615,61 @@ app.get('/api/pesanan', requireAdmin, (req, res) => {
 // 9.1 GET /api/pesanan/track/:nomor (Pelanggan: Lacak Status Pesanan Real-time)
 app.get('/api/pesanan/track/:nomor', (req, res) => {
   const { nomor } = req.params;
-  const cleanNomor = (nomor || '').trim();
+  const rawInput = (nomor || '').trim();
+  const cleanNomor = rawInput.replace(/^[#\s]+/, '').trim();
+  const withBk = cleanNomor.toUpperCase().startsWith('BK-') ? cleanNomor.toUpperCase() : `BK-${cleanNomor.toUpperCase()}`;
 
+  // Query pencarian fleksibel: cocokkan nomor pesanan, nomor ber-prefix BK-, nomor ID, no WA, atau nama
   const sql = `
-    SELECT p.*, 
-      (SELECT json_group_array(json_object('nama', pi.nama_item, 'jumlah', pi.jumlah, 'harga', pi.harga_satuan, 'subtotal', pi.subtotal))
-       FROM pesanan_items pi WHERE pi.pesanan_id = p.id) as items_json
-    FROM pesanan p
-    WHERE LOWER(p.nomor_pesanan) = LOWER(?) OR CAST(p.id AS CHAR) = ?
+    SELECT * FROM pesanan
+    WHERE LOWER(nomor_pesanan) = LOWER(?)
+       OR UPPER(nomor_pesanan) = UPPER(?)
+       OR CAST(id AS CHAR) = ?
+       OR nomor_wa = ?
+       OR LOWER(nama_pelanggan) = LOWER(?)
+    ORDER BY id DESC
     LIMIT 1
   `;
 
-  db.get(sql, [cleanNomor, cleanNomor], (err, row) => {
+  db.get(sql, [cleanNomor, withBk, cleanNomor, cleanNomor, cleanNomor], (err, orderRow) => {
     if (err) {
       return res.status(500).json({ error: 'Gagal mencari pesanan: ' + err.message });
     }
-    if (!row) {
-      return res.status(404).json({ success: false, message: `Pesanan "${cleanNomor}" tidak ditemukan.` });
+    if (!orderRow) {
+      return res.status(404).json({ 
+        success: false, 
+        message: `Pesanan "${rawInput}" tidak ditemukan di database. Pastikan nomor pesanan atau nomor WhatsApp Anda benar.` 
+      });
     }
 
-    let parsedItems = [];
-    try {
-      if (typeof row.items_json === 'string') {
-        parsedItems = JSON.parse(row.items_json);
-      } else if (Array.isArray(row.items_json)) {
-        parsedItems = row.items_json;
-      }
-    } catch {
-      parsedItems = [];
-    }
+    // Ambil rincian items pesanan secara terpisah (kompatibel 100% dengan MySQL & SQLite)
+    const sqlItems = `
+      SELECT nama_item as nama, jumlah, harga_satuan as harga, subtotal
+      FROM pesanan_items
+      WHERE pesanan_id = ?
+    `;
 
-    res.json({
-      success: true,
-      data: {
-        ...row,
-        items: parsedItems
+    db.all(sqlItems, [orderRow.id], (errItems, itemsRows) => {
+      let finalItems = itemsRows && itemsRows.length > 0 ? itemsRows : [];
+
+      // Fallback jika database menggunakan JSON string di items_json
+      if (finalItems.length === 0 && orderRow.items_json) {
+        try {
+          if (typeof orderRow.items_json === 'string') {
+            finalItems = JSON.parse(orderRow.items_json);
+          } else if (Array.isArray(orderRow.items_json)) {
+            finalItems = orderRow.items_json;
+          }
+        } catch {}
       }
+
+      res.json({
+        success: true,
+        data: {
+          ...orderRow,
+          items: finalItems
+        }
+      });
     });
   });
 });

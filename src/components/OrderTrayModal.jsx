@@ -245,6 +245,13 @@ export default function OrderTrayModal({
       setStep('success');
       onClearTray();
 
+      // Simpan pesanan terakhir ke localStorage agar fitur Lacak Status otomatis mendeteksi
+      if (result.data) {
+        try {
+          localStorage.setItem('bk_last_order', JSON.stringify(result.data));
+        } catch {}
+      }
+
       // PENTING: JANGAN langsung buka WhatsApp!
       // Pembeli melihat QRIS dan timer 10 menit terlebih dahulu,
       // sistem otomatis mendeteksi scan QRIS tanpa tombol "Saya Sudah Bayar".
@@ -1057,8 +1064,21 @@ export default function OrderTrayModal({
                     <button
                       type="button"
                       onClick={() => {
+                        const targetOrder = orderSuccess;
+                        if (targetOrder) {
+                          try {
+                            localStorage.setItem('bk_last_order', JSON.stringify(targetOrder));
+                          } catch {}
+                        }
                         onClose();
                         window.location.hash = '#lacak';
+                        setTimeout(() => {
+                          const el = document.getElementById('lacak');
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                          if (targetOrder) {
+                            window.dispatchEvent(new CustomEvent('bk_track_order', { detail: targetOrder }));
+                          }
+                        }, 150);
                       }}
                       className="w-full py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold text-xs rounded-xl transition cursor-pointer"
                     >
