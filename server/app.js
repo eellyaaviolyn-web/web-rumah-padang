@@ -917,12 +917,23 @@ const isDirectRun = process.argv[1] && (
 );
 
 if (isDirectRun && !process.env.VERCEL) {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`===============================================`);
     console.log(`🚀 Server Backend Bundo Kanduang Aktif!`);
     console.log(`📡 URL API: http://localhost:${PORT}/api/menu`);
     console.log(`🐬 Engine: ${db.getEngine()} (${db.getDatabaseName()})`);
     console.log(`===============================================`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`\n❌ [PORT ${PORT} SEDANG DIGUNAKAN]: Port ${PORT} masih dipakai oleh proses Node lain.`);
+      console.error(`💡 Solusi: Tutup jendela terminal lama yang masih berjalan atau jalankan: npx kill-port ${PORT}\n`);
+      process.exit(1);
+    } else {
+      console.error('Server error:', err);
+      process.exit(1);
+    }
   });
 }
 
