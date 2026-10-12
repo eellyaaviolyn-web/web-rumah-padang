@@ -884,6 +884,7 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
           {isAdmin && (
             <AdminView
               activeTab={activeTab}
+              setActiveTab={setActiveTab}
               menuItems={menuItems}
               orders={orders}
               staffList={staffList}
@@ -897,6 +898,13 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
               onDeleteMenu={handleDeleteMenu}
               onToggleStock={handleToggleStok}
               handleExportCSV={handleExportCSV}
+              adminUser={adminUser}
+              activeOperator={activeOperator}
+              onUpdateOrderStatus={handleUpdateOrderStatus}
+              onAdvanceStatus={handleAdvanceStatus}
+              onSelectReceipt={setSelectedReceiptOrder}
+              onOpenAddStaff={() => setShowAddStaffModal(true)}
+              onEditStaff={(item) => setEditingStaffItem({ ...item })}
             />
           )}
 
