@@ -17,10 +17,11 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
   const isOwner = userRole.includes('owner');
   const isAdmin = !isKasir && !isOwner;
 
-  // Navigation: Kasir otomatis diarahkan ke antrean POS (orders), Owner & Admin ke dashboard
+  // Navigation: Kasir otomatis diarahkan ke antrean POS (orders), Owner ke reports, Admin ke dashboard
   const [activeTab, setActiveTab] = useState(() => {
     const role = (adminUser?.role || 'Admin').toLowerCase();
     if (role.includes('kasir')) return 'orders';
+    if (role.includes('owner')) return 'reports';
     return 'dashboard';
   });
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -607,12 +608,12 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
 
   // Navigation Items Terfilter Sesuai Hak Akses Peran (Kasir, Admin, Owner)
   const allNavItems = [
-    { id: 'dashboard', label: isOwner ? 'Ringkasan & Laba' : 'Dashboard Utama', icon: LayoutDashboard, badge: null, roles: ['admin', 'owner'] },
-    { id: 'orders', label: isKasir ? 'Antrean Kasir & POS' : 'Antrean Pesanan & POS', icon: Receipt, badge: pendingOrdersCount > 0 ? `${pendingOrdersCount} Baru` : null, roles: ['admin', 'kasir', 'owner'] },
+    { id: 'dashboard', label: 'Dashboard Utama', icon: LayoutDashboard, badge: null, roles: ['admin'] },
+    { id: 'orders', label: isKasir ? 'Antrean Kasir & POS' : 'Antrean Pesanan & POS', icon: Receipt, badge: pendingOrdersCount > 0 ? `${pendingOrdersCount} Baru` : null, roles: ['admin', 'kasir'] },
     { id: 'menu', label: isKasir ? 'Katalog & Stok Lauk' : 'Katalog Menu & Stok', icon: UtensilsCrossed, badge: `${menuItems.length}`, roles: ['admin', 'kasir'] },
-    { id: 'finance', label: 'Arus Kas & Keuangan', icon: Wallet, badge: null, roles: ['admin', 'owner'] },
-    { id: 'staff', label: 'Akun Staf & Kru', icon: Users, badge: `${staffList.length}`, roles: ['admin', 'owner'] },
-    { id: 'reports', label: 'Laporan & Ekspor', icon: FileText, badge: null, roles: ['admin', 'owner'] },
+    { id: 'finance', label: 'Arus Kas & Keuangan', icon: Wallet, badge: null, roles: ['admin'] },
+    { id: 'staff', label: 'Akun Staf & Kru', icon: Users, badge: `${staffList.length}`, roles: ['admin'] },
+    { id: 'reports', label: isOwner ? 'Laporan Penjualan & Ekspor' : 'Laporan & Ekspor', icon: FileText, badge: null, roles: ['admin', 'owner'] },
     { id: 'database', label: 'Database & phpMyAdmin', icon: Database, badge: 'MySQL', roles: ['admin'] },
   ];
 
@@ -1945,10 +1946,84 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
             </div>
           )}
 
-          {/* ================= TAB 6: LAPORAN & EKSPOR DATA ================= */}
+          {/* ================= TAB 6: LAPORAN & EKSPOR DATA (KHUSUS OWNER & ADMIN) ================= */}
           {activeTab === 'reports' && (
             <div className="space-y-6 animate-fadeIn">
               
+              {/* Executive Owner Welcome Banner */}
+              {isOwner && (
+                <div className="bg-gradient-to-r from-[#1e100a] via-[#2d1b13] to-[#18100c] text-white p-5 sm:p-6 rounded-2xl border border-amber-900/40 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-900/60 border border-purple-500/40 text-purple-200 text-[10px] font-bold">
+                      <Crown className="w-3 h-3 text-[#f5d796]" />
+                      <span>Portal Eksekutif Pemilik Usaha</span>
+                    </div>
+                    <h3 className="font-serif font-black text-lg sm:text-xl text-white">
+                      Laporan & Pembukuan Resmi Warung Padang
+                    </h3>
+                    <p className="text-xs text-stone-300">
+                      Pantau perolehan omzet, beban modal bahan baku, dan laba bersih dari seluruh transaksi kasir.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => setShowPrintReportModal(true)}
+                    className="px-4 py-2.5 bg-[#a61c1c] hover:bg-[#881414] text-white text-xs font-bold rounded-xl transition shadow flex items-center justify-center gap-2 cursor-pointer shrink-0"
+                  >
+                    <Printer className="w-4 h-4" />
+                    <span>Cetak Laporan Penjualan Resmi ➔</span>
+                  </button>
+                </div>
+              )}
+
+              {/* 4 Executive Financial Metric Cards (Omzet, Beban, Laba Bersih, Margin) */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/90 shadow-2xs">
+                  <div className="flex items-center justify-between text-stone-500 mb-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider">Total Omzet Penjualan</span>
+                    <TrendingUp className="w-4 h-4 text-emerald-600" />
+                  </div>
+                  <div className="font-mono font-black text-lg sm:text-2xl text-stone-900">
+                    Rp {totalOmzet.toLocaleString('id-ID')}
+                  </div>
+                  <div className="text-[10px] text-stone-400 mt-1">{orders.length} total pesanan masuk</div>
+                </div>
+
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/90 shadow-2xs">
+                  <div className="flex items-center justify-between text-stone-500 mb-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider">Beban Pengeluaran</span>
+                    <TrendingDown className="w-4 h-4 text-red-500" />
+                  </div>
+                  <div className="font-mono font-black text-lg sm:text-2xl text-red-700">
+                    Rp {totalPengeluaran.toLocaleString('id-ID')}
+                  </div>
+                  <div className="text-[10px] text-stone-400 mt-1">{expenses.length} pos belanja bahan baku</div>
+                </div>
+
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-emerald-200 bg-emerald-50/30 shadow-2xs">
+                  <div className="flex items-center justify-between text-emerald-800 mb-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider">Laba Bersih (Net Profit)</span>
+                    <Sparkles className="w-4 h-4 text-emerald-600" />
+                  </div>
+                  <div className={`font-mono font-black text-lg sm:text-2xl ${labaBersih >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
+                    Rp {labaBersih.toLocaleString('id-ID')}
+                  </div>
+                  <div className="text-[10px] text-emerald-700 font-semibold mt-1">Omzet dikurangi Beban belanja</div>
+                </div>
+
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/90 shadow-2xs">
+                  <div className="flex items-center justify-between text-stone-500 mb-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider">Margin Keuntungan</span>
+                    <Award className="w-4 h-4 text-[#caa268]" />
+                  </div>
+                  <div className="font-mono font-black text-lg sm:text-2xl text-[#a61c1c]">
+                    {profitMargin}%
+                  </div>
+                  <div className="text-[10px] text-stone-400 mt-1">Rata-rata: Rp {avgOrderValue.toLocaleString('id-ID')} / transaksi</div>
+                </div>
+              </div>
+
+              {/* Action Bar: Ekspor File & Cetak Laporan */}
               <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-sm flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <h3 className="font-serif font-bold text-lg text-stone-900">Rekapitulasi Penjualan & Ekspor Pembukuan</h3>
@@ -1985,6 +2060,69 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
                     <Printer className="w-3.5 h-3.5" />
                     <span>Cetak Laporan Resmi</span>
                   </button>
+                </div>
+              </div>
+
+              {/* Tabel Riwayat Transaksi Lengkap */}
+              <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-serif font-bold text-base text-stone-900">Riwayat Seluruh Transaksi Penjualan</h4>
+                    <p className="text-xs text-stone-500">Daftar pesanan pelanggan dari aplikasi mobile dan web kasir</p>
+                  </div>
+                  <span className="text-xs font-mono font-bold px-2.5 py-1 bg-stone-100 rounded-lg text-stone-700">
+                    {orders.length} Transaksi
+                  </span>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs text-left min-w-[700px]">
+                    <thead className="bg-stone-50 text-stone-500 font-mono border-b border-stone-200">
+                      <tr>
+                        <th className="p-3">No. Pesanan</th>
+                        <th className="p-3">Tanggal</th>
+                        <th className="p-3">Pelanggan</th>
+                        <th className="p-3">Tipe</th>
+                        <th className="p-3">Detail Menu</th>
+                        <th className="p-3">Status</th>
+                        <th className="p-3 text-right">Total Transaksi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-stone-100">
+                      {orders.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="p-6 text-center text-stone-400 italic">
+                            Belum ada riwayat pesanan tercatat.
+                          </td>
+                        </tr>
+                      ) : (
+                        orders.slice(0, 15).map(order => (
+                          <tr key={order.id} className="hover:bg-stone-50 transition">
+                            <td className="p-3 font-mono font-bold text-[#a61c1c]">#{order.nomor_pesanan}</td>
+                            <td className="p-3 text-stone-500 font-mono text-[11px]">
+                              {order.created_at ? new Date(order.created_at).toLocaleDateString('id-ID') : '-'}
+                            </td>
+                            <td className="p-3">
+                              <div className="font-bold text-stone-900">{order.nama_pelanggan}</div>
+                              <div className="text-[10px] text-stone-400 font-mono">{order.nomor_wa}</div>
+                            </td>
+                            <td className="p-3 text-stone-600">{order.tipe_layanan}</td>
+                            <td className="p-3 text-stone-700 max-w-[220px] truncate">
+                              {(order.items || []).map(i => `${i.nama || i.nama_item} (${i.jumlah}x)`).join(', ') || '-'}
+                            </td>
+                            <td className="p-3">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${getStatusBadge(order.status)}`}>
+                                {order.status}
+                              </span>
+                            </td>
+                            <td className="p-3 text-right font-mono font-bold text-stone-900">
+                              Rp {Number(order.total_harga || 0).toLocaleString('id-ID')}
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
