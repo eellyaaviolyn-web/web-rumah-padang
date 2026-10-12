@@ -79,10 +79,39 @@ app.use((req, res, next) => {
 // 5. Kriptografi Token Pengelola (HMAC SHA-256 Stateless Token)
 const JWT_SECRET = process.env.ADMIN_SECRET || 'bundo_kanduang_security_salt_2026_xyz_secret';
 
+// Daftar Akun Pengelola Resmi (Multi-Role: Kasir, Admin, Owner)
+const OFFICIAL_ACCOUNTS = [
+  {
+    username: process.env.ADMIN_USER || 'admin',
+    password: process.env.ADMIN_PASSWORD || 'admin123',
+    nama: 'Ahmad Manager',
+    role: 'Admin',
+    badge: 'Admin Pengelola',
+    deskripsi: 'Akses penuh manajemen menu, staf, cabang & basis data'
+  },
+  {
+    username: process.env.KASIR_USER || 'kasir',
+    password: process.env.KASIR_PASSWORD || 'kasir123',
+    nama: 'Rian Hendra (Kasir 1)',
+    role: 'Kasir',
+    badge: 'Kasir Utama POS',
+    deskripsi: 'Akses antrean kasir, proses pesanan & cetak nota belanja'
+  },
+  {
+    username: process.env.OWNER_USER || 'owner',
+    password: process.env.OWNER_PASSWORD || 'owner123',
+    nama: 'H. Dt. Palimo Kayo',
+    role: 'Owner',
+    badge: 'Pemilik & Direktur',
+    deskripsi: 'Akses eksekutif analisis omzet, laba bersih & laporan keuangan'
+  }
+];
+
 function generateToken(user) {
   const payload = JSON.stringify({
     u: user.username,
     r: user.role,
+    n: user.nama || user.username,
     t: Date.now()
   });
   const b64 = Buffer.from(payload).toString('base64url');
@@ -257,32 +286,34 @@ app.post('/api/admin/login', (req, res) => {
   const cleanUser = String(username).trim();
   const cleanPass = String(password).trim();
 
-  // Kredensial Pengelola Resmi
-  const validUser = process.env.ADMIN_USER || 'admin';
-  const validPass = process.env.ADMIN_PASSWORD || 'admin123';
+  // Kredensial Pengelola Resmi Multi-Role (Kasir, Admin, Owner)
+  const matched = OFFICIAL_ACCOUNTS.find(
+    acc => acc.username.toLowerCase() === cleanUser.toLowerCase() && acc.password === cleanPass
+  );
 
-  if (cleanUser === validUser && cleanPass === validPass) {
+  if (matched) {
     // Reset percobaan gagal
     loginAttempts.delete(ip);
 
-    db.get("SELECT * FROM staf WHERE role LIKE '%Kasir%' OR role LIKE '%Admin%' ORDER BY id ASC LIMIT 1", [], (err, staffRow) => {
-      const activeName = staffRow ? staffRow.nama : 'Vinzkie';
-      const activeRole = staffRow ? staffRow.role : 'Kasir Utama & Supervisor POS';
-      const token = generateToken({ username: cleanUser, role: activeRole });
-
-      return res.json({
-        success: true,
-        message: 'Login berhasil! Kredensial terverifikasi dengan token aman.',
-        token,
-        user: {
-          username: cleanUser,
-          nama: activeName,
-          role: activeRole,
-          loginAt: new Date().toISOString()
-        }
-      });
+    const token = generateToken({
+      username: matched.username,
+      role: matched.role,
+      nama: matched.nama
     });
-    return;
+
+    return res.json({
+      success: true,
+      message: `Login berhasil sebagai ${matched.role}!`,
+      token,
+      user: {
+        username: matched.username,
+        nama: matched.nama,
+        role: matched.role,
+        badge: matched.badge,
+        deskripsi: matched.deskripsi,
+        loginAt: new Date().toISOString()
+      }
+    });
   }
 
   // Jika gagal: catat percobaan gagal untuk proteksi Brute-Force
@@ -295,16 +326,26 @@ app.post('/api/admin/login', (req, res) => {
   // Jangan bocorkan kata sandi di pesan error!
   return res.status(401).json({
     success: false,
-    error: 'Username atau kata sandi pengelola salah.'
+    error: 'Username atau kata sandi pengelola salah. Silakan periksa kredensial Kasir, Admin, atau Owner Anda.'
   });
 });
 
 // 1.2 GET /api/admin/verify (Verifikasi Token HMAC SHA-256 Pengelola secara Kriptografis)
 app.get('/api/admin/verify', requireAdmin, (req, res) => {
+  const accountInfo = OFFICIAL_ACCOUNTS.find(
+    a => a.username.toLowerCase() === (req.adminUser.u || '').toLowerCase()
+  );
+
   res.json({
     success: true,
     valid: true,
-    user: req.adminUser,
+    user: {
+      username: req.adminUser.u,
+      role: req.adminUser.r,
+      nama: req.adminUser.n || (accountInfo ? accountInfo.nama : req.adminUser.u),
+      badge: accountInfo ? accountInfo.badge : req.adminUser.r,
+      deskripsi: accountInfo ? accountInfo.deskripsi : ''
+    },
     message: 'Sesi token pengelola sah dan terverifikasi secara kriptografis.'
   });
 });
@@ -421,6 +462,9 @@ app.patch('/api/menu/:id/stok', requireAdmin, (req, res) => {
 
 // 6. DELETE /api/menu/:id (Admin: Hapus menu - Dilindungi requireAdmin)
 app.delete('/api/menu/:id', requireAdmin, (req, res) => {
+  if (req.adminUser && req.adminUser.r === 'Kasir') {
+    return res.status(403).json({ error: 'Akses Ditolak: Peran Kasir tidak memiliki wewenang untuk menghapus hidangan menu dari database.' });
+  }
   const { id } = req.params;
   db.run('DELETE FROM menu WHERE id = ?', [id], function (err) {
     if (err) return res.status(500).json({ error: 'Gagal menghapus menu dari database.' });
@@ -651,6 +695,9 @@ app.patch('/api/pesanan/:id/status', (req, res) => {
 
 // 11. DELETE /api/pesanan/:id (Admin: Hapus transaksi - Dilindungi requireAdmin)
 app.delete('/api/pesanan/:id', requireAdmin, (req, res) => {
+  if (req.adminUser && req.adminUser.r === 'Kasir') {
+    return res.status(403).json({ error: 'Akses Ditolak: Peran Kasir tidak memiliki wewenang untuk menghapus riwayat transaksi pesanan.' });
+  }
   const { id } = req.params;
   db.run('DELETE FROM pesanan_items WHERE pesanan_id = ?', [id], (err) => {
     if (err) return res.status(500).json({ error: 'Gagal menghapus item pesanan.' });
@@ -796,6 +843,9 @@ app.put('/api/staf/:id', requireAdmin, (req, res) => {
 });
 
 app.delete('/api/staf/:id', requireAdmin, (req, res) => {
+  if (req.adminUser && req.adminUser.r !== 'Admin') {
+    return res.status(403).json({ error: 'Akses Ditolak: Hanya Admin Pengelola yang dapat menghapus akun staf.' });
+  }
   const { id } = req.params;
   db.run('DELETE FROM staf WHERE id = ?', [id], function (err) {
     if (err) return res.status(500).json({ error: 'Gagal menghapus staf.' });

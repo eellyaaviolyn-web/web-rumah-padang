@@ -6,13 +6,23 @@ import {
   ChefHat, Bike, X, ChevronRight, Menu as MenuIcon, 
   RefreshCw, DollarSign, TrendingUp, TrendingDown, ShieldCheck, Check,
   Sparkles, Download, Volume2, VolumeX, Filter, Grid, List, 
-  ArrowUpRight, PieChart, Layers, AlertCircle
+  ArrowUpRight, PieChart, Layers, AlertCircle, Crown, ShoppingCart, Award
 } from 'lucide-react';
 import ReceiptModal from './ReceiptModal';
 
 export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
-  // Navigation: 'dashboard' | 'orders' | 'menu' | 'finance' | 'staff' | 'reports' | 'database'
-  const [activeTab, setActiveTab] = useState('dashboard');
+  // Identifikasi Peran Pengguna Aktif (Multi-Role: Kasir, Admin, Owner)
+  const userRole = (adminUser?.role || 'Admin').toLowerCase();
+  const isKasir = userRole.includes('kasir');
+  const isOwner = userRole.includes('owner');
+  const isAdmin = !isKasir && !isOwner;
+
+  // Navigation: Kasir otomatis diarahkan ke antrean POS (orders), Owner & Admin ke dashboard
+  const [activeTab, setActiveTab] = useState(() => {
+    const role = (adminUser?.role || 'Admin').toLowerCase();
+    if (role.includes('kasir')) return 'orders';
+    return 'dashboard';
+  });
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // View Layout Toggles
@@ -595,16 +605,22 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
     }
   };
 
-  // Navigation Items
-  const navItems = [
-    { id: 'dashboard', label: 'Dashboard Utama', icon: LayoutDashboard, badge: null },
-    { id: 'orders', label: 'Antrean Pesanan & POS', icon: Receipt, badge: pendingOrdersCount > 0 ? `${pendingOrdersCount} Baru` : null },
-    { id: 'menu', label: 'Katalog Menu & Stok', icon: UtensilsCrossed, badge: `${menuItems.length}` },
-    { id: 'finance', label: 'Arus Kas & Keuangan', icon: Wallet, badge: null },
-    { id: 'staff', label: 'Akun Staf & Kru', icon: Users, badge: `${staffList.length}` },
-    { id: 'reports', label: 'Laporan & Ekspor', icon: FileText, badge: null },
-    { id: 'database', label: 'Database & phpMyAdmin', icon: Database, badge: 'MySQL' },
+  // Navigation Items Terfilter Sesuai Hak Akses Peran (Kasir, Admin, Owner)
+  const allNavItems = [
+    { id: 'dashboard', label: isOwner ? 'Ringkasan & Laba' : 'Dashboard Utama', icon: LayoutDashboard, badge: null, roles: ['admin', 'owner'] },
+    { id: 'orders', label: isKasir ? 'Antrean Kasir & POS' : 'Antrean Pesanan & POS', icon: Receipt, badge: pendingOrdersCount > 0 ? `${pendingOrdersCount} Baru` : null, roles: ['admin', 'kasir', 'owner'] },
+    { id: 'menu', label: isKasir ? 'Katalog & Stok Lauk' : 'Katalog Menu & Stok', icon: UtensilsCrossed, badge: `${menuItems.length}`, roles: ['admin', 'kasir'] },
+    { id: 'finance', label: 'Arus Kas & Keuangan', icon: Wallet, badge: null, roles: ['admin', 'owner'] },
+    { id: 'staff', label: 'Akun Staf & Kru', icon: Users, badge: `${staffList.length}`, roles: ['admin', 'owner'] },
+    { id: 'reports', label: 'Laporan & Ekspor', icon: FileText, badge: null, roles: ['admin', 'owner'] },
+    { id: 'database', label: 'Database & phpMyAdmin', icon: Database, badge: 'MySQL', roles: ['admin'] },
   ];
+
+  const navItems = allNavItems.filter(item => {
+    if (isKasir) return item.roles.includes('kasir');
+    if (isOwner) return item.roles.includes('owner');
+    return true; // Admin mendapatkan semua tab
+  });
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-stone-800 flex font-sans antialiased selection:bg-[#a61c1c] selection:text-white">
@@ -700,28 +716,38 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
           {/* User Operator Card */}
           <div 
             onClick={() => {
-              if (activeOperator) setEditingStaffItem({ ...activeOperator });
+              if (activeOperator && isAdmin) setEditingStaffItem({ ...activeOperator });
             }}
-            className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200 hover:border-red-300 hover:shadow-2xs transition cursor-pointer group"
-            title="Klik untuk edit profil operator"
+            className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200 hover:shadow-2xs transition group"
+            title="Profil pengguna aktif"
           >
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-9 h-9 rounded-full bg-[#18100c] text-[#f5d796] font-bold flex items-center justify-center text-xs shrink-0 shadow-xs group-hover:scale-105 transition">
-                {getInitials(activeOperator?.nama)}
+              <div className={`w-9 h-9 rounded-full font-bold flex items-center justify-center text-xs shrink-0 shadow-xs ${
+                isKasir 
+                  ? 'bg-emerald-600 text-white' 
+                  : isOwner 
+                  ? 'bg-purple-800 text-amber-300' 
+                  : 'bg-[#18100c] text-[#f5d796]'
+              }`}>
+                {isOwner ? <Crown className="w-4 h-4" /> : isKasir ? <ShoppingCart className="w-4 h-4" /> : getInitials(activeOperator?.nama)}
               </div>
               <div className="overflow-hidden">
-                <div className="text-xs font-bold text-slate-900 truncate group-hover:text-[#a61c1c] transition">
-                  {activeOperator?.nama || 'Vinzkie'}
+                <div className="text-xs font-bold text-slate-900 truncate">
+                  {activeOperator?.nama || adminUser?.nama || (isKasir ? 'Rian Hendra' : isOwner ? 'H. Dt. Palimo Kayo' : 'Ahmad Manager')}
                 </div>
-                <div className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
-                  <span className="truncate">{activeOperator?.role || 'Super Admin'}</span>
+                <div className={`text-[10px] font-bold flex items-center gap-1 ${
+                  isKasir ? 'text-emerald-700' : isOwner ? 'text-purple-700' : 'text-[#a61c1c]'
+                }`}>
+                  <ShieldCheck className="w-3 h-3 shrink-0" />
+                  <span className="truncate">{adminUser?.badge || (isKasir ? 'Kasir POS' : isOwner ? 'Owner Resto' : 'Admin Pengelola')}</span>
                 </div>
               </div>
             </div>
-            <div className="p-1 rounded text-slate-400 group-hover:text-red-700 transition shrink-0">
-              <Edit3 className="w-3.5 h-3.5" />
-            </div>
+            {isAdmin && (
+              <div className="p-1 rounded text-slate-400 group-hover:text-red-700 transition shrink-0">
+                <Edit3 className="w-3.5 h-3.5" />
+              </div>
+            )}
           </div>
 
           {/* Logout Button */}
@@ -824,6 +850,37 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
           {activeTab === 'dashboard' && (
             <div className="space-y-6 animate-fadeIn">
               
+              {/* Executive Banner Khusus Owner */}
+              {isOwner && (
+                <div className="bg-gradient-to-r from-purple-900/15 via-purple-900/5 to-white border border-purple-300 p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-800 to-purple-950 text-amber-300 flex items-center justify-center shrink-0 shadow-xs border border-purple-700">
+                      <Crown className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <div className="font-serif font-black text-sm text-purple-950 flex items-center gap-2">
+                        <span>Executive Financial Dashboard</span>
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold bg-purple-100 text-purple-900 border border-purple-200">
+                          Hak Akses Owner
+                        </span>
+                      </div>
+                      <p className="text-xs text-purple-800/90 mt-0.5 max-w-xl">
+                        Selamat datang, <strong>{adminUser?.nama || 'H. Dt. Palimo Kayo'}</strong>. Pantau kesehatan laba bersih, evaluasi belanja bahan baku harian, dan kinerja penjualan resto.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                    <button
+                      onClick={() => setShowPrintReportModal(true)}
+                      className="px-3.5 py-2 bg-purple-800 hover:bg-purple-900 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer"
+                    >
+                      <Printer className="w-3.5 h-3.5" />
+                      <span>Cetak Laporan Resmi</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* 4 Hero KPI Metrics Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 
@@ -1072,6 +1129,33 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
           {activeTab === 'orders' && (
             <div className="space-y-6 animate-fadeIn">
               
+              {/* Mode Banner untuk Kasir */}
+              {isKasir && (
+                <div className="bg-gradient-to-r from-emerald-500/15 via-emerald-500/5 to-white border border-emerald-300 p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                      <ShoppingCart className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-xs text-emerald-950 flex items-center gap-2">
+                        <span>Mode Kasir POS Resto Aktif</span>
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] bg-emerald-100 text-emerald-800 font-bold border border-emerald-200">
+                          Shift Kasir Utama
+                        </span>
+                      </div>
+                      <p className="text-xs text-emerald-800 mt-0.5">
+                        Pesanan dari Website & APK Mobile masuk otomatis ke antrean ini. Anda dapat memverifikasi pembayaran (QRIS / Tunai) dan mencetak struk nota belanja pelanggan.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                    <span className="text-xs font-mono font-bold text-emerald-900 bg-emerald-100/90 px-3 py-1.5 rounded-xl border border-emerald-200">
+                      Operator: {adminUser?.nama || 'Vinzkie'}
+                    </span>
+                  </div>
+                </div>
+              )}
+
               {/* Header Filter & View Toggle */}
               <div className="bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/90 shadow-sm space-y-3">
                 <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
@@ -1275,13 +1359,15 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
                             <Phone className="w-3.5 h-3.5" />
                           </a>
 
-                          <button
-                            onClick={() => handleDeleteOrder(order.id)}
-                            className="p-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg transition cursor-pointer"
-                            title="Hapus transaksi dari database"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
+                          {!isKasir && (
+                            <button
+                              onClick={() => handleDeleteOrder(order.id)}
+                              className="p-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg transition cursor-pointer"
+                              title="Hapus transaksi dari database"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
                         </div>
                       </div>
 
@@ -1353,13 +1439,15 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
                               >
                                 <Printer className="w-3.5 h-3.5" />
                               </button>
-                              <button
-                                onClick={() => handleDeleteOrder(order.id)}
-                                className="p-1.5 text-stone-400 hover:text-red-600 rounded-lg transition cursor-pointer"
-                                title="Hapus transaksi"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
+                              {!isKasir && (
+                                <button
+                                  onClick={() => handleDeleteOrder(order.id)}
+                                  className="p-1.5 text-stone-400 hover:text-red-600 rounded-lg transition cursor-pointer"
+                                  title="Hapus transaksi"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
                             </div>
                           </td>
                         </tr>
@@ -1415,13 +1503,20 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
                     </button>
                   </div>
 
-                  <button
-                    onClick={() => setShowAddMenuModal(true)}
-                    className="px-4 py-2 bg-[#a61c1c] hover:bg-[#881414] text-white font-bold text-xs rounded-xl transition shadow flex items-center gap-2 shrink-0 cursor-pointer"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>+ Tambah Hidangan</span>
-                  </button>
+                  {!isKasir ? (
+                    <button
+                      onClick={() => setShowAddMenuModal(true)}
+                      className="px-4 py-2 bg-[#a61c1c] hover:bg-[#881414] text-white font-bold text-xs rounded-xl transition shadow flex items-center gap-2 shrink-0 cursor-pointer"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>+ Tambah Hidangan</span>
+                    </button>
+                  ) : (
+                    <div className="px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold flex items-center gap-1.5 shrink-0">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>Mode Kasir: Atur Stok Lauk</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -1499,16 +1594,18 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
                               </div>
                             </div>
 
-                            <button
-                              onClick={() => {
-                                setEditingPriceItem(item);
-                                setTempPrice(String(item.harga));
-                              }}
-                              className="p-1.5 text-stone-400 hover:text-[#a61c1c] rounded-lg hover:bg-stone-100 transition cursor-pointer"
-                              title="Edit Harga"
-                            >
-                              <Edit3 className="w-4 h-4" />
-                            </button>
+                            {!isKasir && (
+                              <button
+                                onClick={() => {
+                                  setEditingPriceItem(item);
+                                  setTempPrice(String(item.harga));
+                                }}
+                                className="p-1.5 text-stone-400 hover:text-[#a61c1c] rounded-lg hover:bg-stone-100 transition cursor-pointer"
+                                title="Edit Harga"
+                              >
+                                <Edit3 className="w-4 h-4" />
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1527,13 +1624,15 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
                           <span>{item.stok_status}</span>
                         </button>
 
-                        <button
-                          onClick={() => handleDeleteMenu(item.id, item.nama)}
-                          className="p-2 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition cursor-pointer"
-                          title="Hapus hidangan"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        {!isKasir && (
+                          <button
+                            onClick={() => handleDeleteMenu(item.id, item.nama)}
+                            className="p-2 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition cursor-pointer"
+                            title="Hapus hidangan"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
                       </div>
 
                     </div>
@@ -1582,16 +1681,18 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
                           <td className="p-3.5">
                             <div className="font-bold text-sm text-stone-900 flex items-center gap-1.5">
                               <span>Rp {Number(item.harga).toLocaleString('id-ID')}</span>
-                              <button
-                                onClick={() => {
-                                  setEditingPriceItem(item);
-                                  setTempPrice(String(item.harga));
-                                }}
-                                className="text-stone-400 hover:text-[#a61c1c] p-1 rounded hover:bg-stone-100 transition cursor-pointer"
-                                title="Ubah harga"
-                              >
-                                <Edit3 className="w-3.5 h-3.5" />
-                              </button>
+                              {!isKasir && (
+                                <button
+                                  onClick={() => {
+                                    setEditingPriceItem(item);
+                                    setTempPrice(String(item.harga));
+                                  }}
+                                  className="text-stone-400 hover:text-[#a61c1c] p-1 rounded hover:bg-stone-100 transition cursor-pointer"
+                                  title="Ubah harga"
+                                >
+                                  <Edit3 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
                             </div>
                           </td>
                           <td className="p-3.5">
@@ -1608,13 +1709,17 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
                             </button>
                           </td>
                           <td className="p-3.5 text-right">
-                            <button
-                              onClick={() => handleDeleteMenu(item.id, item.nama)}
-                              className="p-2 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition cursor-pointer"
-                              title="Hapus menu dari database"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
+                            {!isKasir ? (
+                              <button
+                                onClick={() => handleDeleteMenu(item.id, item.nama)}
+                                className="p-2 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition cursor-pointer"
+                                title="Hapus menu dari database"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            ) : (
+                              <span className="text-[10px] text-stone-400 italic font-mono">Hanya-Baca</span>
+                            )}
                           </td>
                         </tr>
                       ))}
@@ -1995,54 +2100,28 @@ export default function AdminPortal({ onBackToStore, onLogout, adminUser }) {
 
         {/* ================= MOBILE BOTTOM NAVIGATION (HP / SMARTPHONE) ================= */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 flex items-center justify-around shadow-lg">
-          <button
-            type="button"
-            onClick={() => setActiveTab('dashboard')}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition cursor-pointer min-w-[56px] ${
-              activeTab === 'dashboard' ? 'text-[#a61c1c] font-bold' : 'text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            <LayoutDashboard className="w-5 h-5 mb-0.5" />
-            <span className="text-[10px]">Ringkasan</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('orders')}
-            className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition cursor-pointer min-w-[56px] ${
-              activeTab === 'orders' ? 'text-[#a61c1c] font-bold' : 'text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            <Receipt className="w-5 h-5 mb-0.5" />
-            {pendingOrdersCount > 0 && (
-              <span className="absolute top-0 right-2 w-4 h-4 bg-[#a61c1c] text-white text-[9px] font-black rounded-full flex items-center justify-center animate-pulse">
-                {pendingOrdersCount}
-              </span>
-            )}
-            <span className="text-[10px]">Pesanan</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('menu')}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition cursor-pointer min-w-[56px] ${
-              activeTab === 'menu' ? 'text-[#a61c1c] font-bold' : 'text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            <UtensilsCrossed className="w-5 h-5 mb-0.5" />
-            <span className="text-[10px]">Menu</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('finance')}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition cursor-pointer min-w-[56px] ${
-              activeTab === 'finance' ? 'text-[#a61c1c] font-bold' : 'text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            <Wallet className="w-5 h-5 mb-0.5" />
-            <span className="text-[10px]">Kas</span>
-          </button>
+          {navItems.slice(0, 4).map(item => {
+            const Icon = item.icon;
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setActiveTab(item.id)}
+                className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition cursor-pointer min-w-[56px] ${
+                  isActive ? 'text-[#a61c1c] font-bold' : 'text-slate-500 hover:text-slate-800'
+                }`}
+              >
+                <Icon className="w-5 h-5 mb-0.5" />
+                {item.id === 'orders' && pendingOrdersCount > 0 && (
+                  <span className="absolute top-0 right-2 w-4 h-4 bg-[#a61c1c] text-white text-[9px] font-black rounded-full flex items-center justify-center animate-pulse">
+                    {pendingOrdersCount}
+                  </span>
+                )}
+                <span className="text-[10px] truncate max-w-[64px]">{item.label.split(' ')[0]}</span>
+              </button>
+            );
+          })}
 
           <button
             type="button"
