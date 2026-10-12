@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Clock, CheckCheck, ChefHat, Bike, CheckCircle2, AlertCircle, Phone, Receipt, RefreshCw, Sparkles } from 'lucide-react';
+import { Search, Clock, CheckCheck, ChefHat, Bike, CheckCircle2, AlertCircle, Phone, Receipt, RefreshCw } from 'lucide-react';
 
 const STATUS_STEPS = [
   { key: 'Menunggu Konfirmasi', label: 'Menunggu Konfirmasi', icon: Clock, desc: 'Pesanan tersimpan di database kasir resto' },
@@ -174,10 +174,6 @@ export default function OrderTracker() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Section Heading */}
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-[#a61c1c] text-xs font-bold mb-2">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Sistem Pantauan Dapur Real-time</span>
-          </div>
           <h2 className="font-serif text-3xl sm:text-4xl font-black text-[#19120e] tracking-tight">
             Lacak Status Masakan Anda
           </h2>
