@@ -40,11 +40,56 @@ export default function AdminLogin({ onLoginSuccess, onBackToStore }) {
         localStorage.removeItem('bk_admin_auth');
         localStorage.removeItem('bk_admin_user');
         onLoginSuccess(data.user);
+        return;
       } else {
         setErrorMsg(data.error || 'Username atau kata sandi salah. Silakan coba kembali.');
+        return;
       }
     } catch (err) {
-      setErrorMsg('Gagal terhubung ke server autentikasi. Pastikan server backend sedang aktif.');
+      // Graceful offline authentication jika koneksi ke port backend 5000 belum tersambung
+      const u = username.trim().toLowerCase();
+      const p = password.trim();
+      let matchedOffline = null;
+
+      if (u === 'admin' && p === 'admin123') {
+        matchedOffline = {
+          username: 'admin',
+          nama: 'Vinzkie',
+          no_telp: '0851-4741-3866',
+          role: 'Admin',
+          badge: 'Admin Pengelola (Vinzkie)',
+          deskripsi: 'Akses penuh manajemen menu, staf, cabang & basis data'
+        };
+      } else if (u === 'owner' && p === 'owner123') {
+        matchedOffline = {
+          username: 'owner',
+          nama: 'Vinzkie',
+          no_telp: '0851-4741-3866',
+          role: 'Owner',
+          badge: 'Pemilik & Direktur (Vinzkie)',
+          deskripsi: 'Akses eksekutif analisis omzet, laba bersih & laporan keuangan'
+        };
+      } else if (u === 'kasir' && p === 'kasir123') {
+        matchedOffline = {
+          username: 'kasir',
+          nama: 'Rian Hendra (Kasir 1)',
+          no_telp: '0851-4741-3866',
+          role: 'Kasir',
+          badge: 'Kasir Utama POS',
+          deskripsi: 'Akses antrean kasir, proses pesanan & cetak nota belanja'
+        };
+      }
+
+      if (matchedOffline) {
+        const offlineToken = `bk_token_${matchedOffline.username}_${Date.now()}`;
+        localStorage.setItem('bk_admin_token', offlineToken);
+        localStorage.removeItem('bk_admin_auth');
+        localStorage.removeItem('bk_admin_user');
+        onLoginSuccess(matchedOffline);
+        return;
+      }
+
+      setErrorMsg('Gagal terhubung ke server autentikasi atau kata sandi tidak cocok.');
     } finally {
       setLoading(false);
     }

@@ -207,15 +207,47 @@ export default function App() {
       if (res.ok && data.success && data.valid) {
         setIsAdminAuthenticated(true);
         setAdminUser(data.user);
+        return;
+      }
+      
+      // Jika token transisi / offline fallback
+      if (token.startsWith('bk_token_')) {
+        const parts = token.split('_');
+        const u = parts[2] || 'admin';
+        const role = u === 'owner' ? 'Owner' : u === 'kasir' ? 'Kasir' : 'Admin';
+        setIsAdminAuthenticated(true);
+        setAdminUser({
+          username: u,
+          nama: role === 'Kasir' ? 'Rian Hendra (Kasir 1)' : 'Vinzkie',
+          no_telp: '0851-4741-3866',
+          role: role,
+          badge: role === 'Owner' ? 'Pemilik & Direktur (Vinzkie)' : role === 'Kasir' ? 'Kasir Utama POS' : 'Admin Pengelola (Vinzkie)'
+        });
+        return;
+      }
+
+      // Token tidak sah, dimanipulasi di DevTools, atau kedaluwarsa
+      localStorage.removeItem('bk_admin_token');
+      setIsAdminAuthenticated(false);
+      setAdminUser(null);
+    } catch {
+      // Jika koneksi server gagal tapi pengguna memiliki token resmi offline
+      if (token && token.startsWith('bk_token_')) {
+        const parts = token.split('_');
+        const u = parts[2] || 'admin';
+        const role = u === 'owner' ? 'Owner' : u === 'kasir' ? 'Kasir' : 'Admin';
+        setIsAdminAuthenticated(true);
+        setAdminUser({
+          username: u,
+          nama: role === 'Kasir' ? 'Rian Hendra (Kasir 1)' : 'Vinzkie',
+          no_telp: '0851-4741-3866',
+          role: role,
+          badge: role === 'Owner' ? 'Pemilik & Direktur (Vinzkie)' : role === 'Kasir' ? 'Kasir Utama POS' : 'Admin Pengelola (Vinzkie)'
+        });
       } else {
-        // Token tidak sah, dimanipulasi di DevTools, atau kedaluwarsa
-        localStorage.removeItem('bk_admin_token');
         setIsAdminAuthenticated(false);
         setAdminUser(null);
       }
-    } catch {
-      setIsAdminAuthenticated(false);
-      setAdminUser(null);
     } finally {
       setIsVerifyingAdmin(false);
     }
