@@ -170,26 +170,26 @@ export default function OrderTracker() {
   const activeStepIdx = orderResult ? getStepIndex(orderResult.status) : 0;
 
   return (
-    <section id="lacak" className="py-20 bg-[#f7f4ee] border-t border-[#e8dfd5] relative">
+    <section id="lacak" className="py-12 sm:py-16 md:py-20 bg-[#f7f4ee] border-t border-[#e8dfd5] relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Section Heading */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <h2 className="font-serif text-3xl sm:text-4xl font-black text-[#19120e] tracking-tight">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10">
+          <h2 className="font-serif text-2xl sm:text-4xl font-black text-[#19120e] tracking-tight">
             Lacak Status Masakan Anda
           </h2>
-          <p className="text-sm text-stone-600 mt-2">
+          <p className="text-xs sm:text-sm text-stone-600 mt-1.5 sm:mt-2">
             Pantau tahapan penyiapan hidangan Minang Anda dari dapur hingga siap santap langsung dari catatan database kasir.
           </p>
         </div>
 
         {/* Search Card */}
-        <div className="bg-white rounded-2xl shadow-md border border-[#e5dcd3] p-5 sm:p-7 mb-8">
+        <div className="bg-white rounded-2xl shadow-md border border-[#e5dcd3] p-4 sm:p-7 mb-6 sm:mb-8">
           <form 
             onSubmit={(e) => {
               e.preventDefault();
               handleSearch();
             }}
-            className="flex flex-col sm:flex-row gap-3"
+            className="flex flex-col sm:flex-row gap-2.5 sm:gap-3"
           >
             <div className="relative flex-1">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400">
@@ -200,13 +200,13 @@ export default function OrderTracker() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Masukkan Nomor Pesanan (contoh: BK-583161 atau nomor WA)"
-                className="w-full pl-11 pr-4 py-3 bg-[#fbfaf8] border border-stone-300 rounded-xl text-sm focus:outline-none focus:border-[#a61c1c] focus:ring-1 focus:ring-[#a61c1c] text-stone-800 placeholder-stone-400 transition font-medium"
+                className="w-full pl-11 pr-4 py-3 min-h-[44px] bg-[#fbfaf8] border border-stone-300 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-[#a61c1c] focus:ring-1 focus:ring-[#a61c1c] text-stone-800 placeholder-stone-400 transition font-medium"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="bg-[#a61c1c] hover:bg-[#8e1717] active:scale-98 text-white font-bold text-sm px-6 py-3 rounded-xl transition flex items-center justify-center gap-2 shrink-0 shadow disabled:opacity-50 cursor-pointer"
+              className="w-full sm:w-auto bg-[#a61c1c] hover:bg-[#8e1717] active:scale-98 text-white font-bold text-xs sm:text-sm px-6 py-3 min-h-[44px] rounded-xl transition flex items-center justify-center gap-2 shrink-0 shadow disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <>
@@ -223,17 +223,17 @@ export default function OrderTracker() {
           </form>
 
           {/* Quick chips tersimpan & demo terdaftar */}
-          <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-stone-500">
+          <div className="mt-4 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs text-stone-500">
             {lastLocalOrder && lastLocalOrder.nomor_pesanan && (
-              <div className="flex items-center gap-1.5 mr-1">
-                <span className="font-bold text-stone-700">Pesanan Terakhir Anda:</span>
+              <div className="flex items-center gap-1.5 mr-1 flex-wrap">
+                <span className="font-bold text-stone-700 text-[11px] sm:text-xs">Pesanan Terakhir Anda:</span>
                 <button
                   type="button"
                   onClick={() => {
                     setSearchQuery(lastLocalOrder.nomor_pesanan);
                     handleSearch(lastLocalOrder.nomor_pesanan);
                   }}
-                  className="font-mono text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-2.5 py-1 rounded-lg transition font-bold cursor-pointer flex items-center gap-1 shadow-2xs"
+                  className="font-mono text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-2.5 py-1 min-h-[32px] rounded-lg transition font-bold cursor-pointer flex items-center gap-1 shadow-2xs active:scale-95"
                 >
                   <span>#{lastLocalOrder.nomor_pesanan}</span>
                   <span className="text-[10px] bg-emerald-600 text-white px-1.5 py-0.2 rounded-full">Lacak</span>
@@ -251,7 +251,7 @@ export default function OrderTracker() {
                     setSearchQuery(no);
                     handleSearch(no);
                   }}
-                  className="font-mono text-[#a61c1c] bg-red-50 hover:bg-red-100 border border-red-200 px-2 py-0.5 rounded-lg transition font-semibold text-[11px] cursor-pointer"
+                  className="font-mono text-[#a61c1c] bg-red-50 hover:bg-red-100 border border-red-200 px-2 py-0.5 rounded-lg transition font-semibold text-[11px] cursor-pointer active:scale-95"
                 >
                   {no}
                 </button>
@@ -270,12 +270,12 @@ export default function OrderTracker() {
 
         {/* Result Tracking Card */}
         {orderResult && (
-          <div className="bg-white rounded-2xl shadow-xl border-2 border-[#c59837]/40 p-6 sm:p-8 animate-fadeIn">
+          <div className="bg-white rounded-2xl shadow-xl border-2 border-[#c59837]/40 p-4 sm:p-8 animate-fadeIn">
             {/* Order Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 sm:pb-6 border-b border-stone-200">
               <div>
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <span className="font-mono font-black text-xl text-[#a61c1c]">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-mono font-black text-lg sm:text-xl text-[#a61c1c]">
                     #{orderResult.nomor_pesanan}
                   </span>
                   <span className="bg-[#c59837]/15 text-[#8f6a1e] font-bold text-xs px-2.5 py-0.5 rounded-full border border-[#c59837]/30">
@@ -290,10 +290,10 @@ export default function OrderTracker() {
                 </div>
               </div>
 
-              <div className="text-left sm:text-right flex sm:flex-col items-center sm:items-end justify-between gap-2">
+              <div className="text-left sm:text-right flex sm:flex-col items-center sm:items-end justify-between gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-stone-100">
                 <div>
-                  <div className="text-xs text-stone-500">Total Pembayaran</div>
-                  <div className="font-serif font-black text-xl text-[#19120e]">
+                  <div className="text-[11px] sm:text-xs text-stone-500">Total Pembayaran</div>
+                  <div className="font-serif font-black text-lg sm:text-xl text-[#19120e]">
                     Rp {Number(orderResult.total_harga || 0).toLocaleString('id-ID')}
                   </div>
                 </div>
@@ -302,7 +302,7 @@ export default function OrderTracker() {
                   type="button"
                   onClick={() => handleSearch(orderResult.nomor_pesanan)}
                   disabled={loading}
-                  className="px-3 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold rounded-lg transition flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1.5 min-h-[36px] bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold rounded-lg transition flex items-center gap-1.5 cursor-pointer active:scale-95"
                   title="Segarkan status pesanan terkini dari database"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#a61c1c]' : ''}`} />
@@ -312,13 +312,13 @@ export default function OrderTracker() {
             </div>
 
             {/* Stepper Visualizer */}
-            <div className="py-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 relative">
+            <div className="py-6 sm:py-8">
+              {/* Desktop Stepper (sm and up) */}
+              <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-5 gap-3 relative">
                 {STATUS_STEPS.map((step, idx) => {
                   const Icon = step.icon;
                   const isDone = idx < activeStepIdx;
                   const isCurrent = idx === activeStepIdx;
-                  const isPending = idx > activeStepIdx;
 
                   return (
                     <div 
@@ -355,6 +355,65 @@ export default function OrderTracker() {
                       <p className="text-[11px] text-stone-500 leading-relaxed">
                         {step.desc}
                       </p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Mobile Connected Timeline Stepper (Vertical Flow) */}
+              <div className="sm:hidden space-y-2 relative pl-2">
+                {STATUS_STEPS.map((step, idx) => {
+                  const Icon = step.icon;
+                  const isDone = idx < activeStepIdx;
+                  const isCurrent = idx === activeStepIdx;
+                  const isLast = idx === STATUS_STEPS.length - 1;
+
+                  return (
+                    <div key={step.key} className="relative flex items-start gap-3">
+                      {/* Vertical line connecting steps */}
+                      {!isLast && (
+                        <div 
+                          className={`absolute left-3.5 top-7 bottom-0 w-0.5 -ml-px ${
+                            isDone ? 'bg-emerald-500' : 'bg-stone-200'
+                          }`}
+                        />
+                      )}
+
+                      {/* Icon circle */}
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 z-10 transition ${
+                        isCurrent 
+                          ? 'bg-[#c59837] text-white ring-4 ring-[#c59837]/25 shadow animate-pulse' 
+                          : isDone 
+                          ? 'bg-emerald-600 text-white' 
+                          : 'bg-stone-100 text-stone-400 border border-stone-200'
+                      }`}>
+                        <Icon className="w-3.5 h-3.5" />
+                      </div>
+
+                      {/* Step content */}
+                      <div className={`flex-1 pb-3 transition ${
+                        isCurrent ? 'opacity-100' : isDone ? 'opacity-90' : 'opacity-50'
+                      }`}>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded ${
+                            isCurrent ? 'bg-[#c59837]/15 text-[#8f6a1e]' : isDone ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-100 text-stone-500'
+                          }`}>
+                            Tahap {idx + 1}
+                          </span>
+                          {isCurrent && (
+                            <span className="text-[10px] font-bold text-amber-600 animate-pulse">● Sedang Diproses</span>
+                          )}
+                          {isDone && (
+                            <span className="text-[10px] font-bold text-emerald-700">✓ Selesai</span>
+                          )}
+                        </div>
+                        <div className="text-xs font-bold text-stone-900 mt-0.5">
+                          {step.label}
+                        </div>
+                        <p className="text-[11px] text-stone-500 leading-snug mt-0.5">
+                          {step.desc}
+                        </p>
+                      </div>
                     </div>
                   );
                 })}

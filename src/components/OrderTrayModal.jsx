@@ -271,7 +271,7 @@ export default function OrderTrayModal({
       <div className="fixed inset-0" onClick={onClose} />
 
       {/* Modern Shopee / TikTok Style Slide-Over Drawer */}
-      <div className="relative w-full sm:max-w-md md:max-w-lg h-full bg-[#fcfbf9] text-[#19120e] shadow-2xl flex flex-col z-10 border-l border-stone-200">
+      <div className="relative w-full sm:max-w-md md:max-w-lg h-[100dvh] max-h-[100dvh] bg-[#fcfbf9] text-[#19120e] shadow-2xl flex flex-col z-10 border-l border-stone-200">
         
         <style>{`
           @keyframes scanBeam {
@@ -527,7 +527,7 @@ export default function OrderTrayModal({
                       placeholder="Contoh: Rian Pratama"
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
-                      className="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#a61c1c] text-stone-900"
+                      className="w-full px-3 py-2.5 min-h-[42px] bg-stone-50 border border-stone-200 rounded-xl text-base sm:text-xs focus:outline-none focus:border-[#a61c1c] text-stone-900"
                     />
                   </div>
 
@@ -541,7 +541,7 @@ export default function OrderTrayModal({
                       placeholder="Contoh: 0812-3456-7890"
                       value={whatsappNumber}
                       onChange={(e) => setWhatsappNumber(e.target.value)}
-                      className="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#a61c1c] text-stone-900"
+                      className="w-full px-3 py-2.5 min-h-[42px] bg-stone-50 border border-stone-200 rounded-xl text-base sm:text-xs focus:outline-none focus:border-[#a61c1c] text-stone-900"
                     />
                   </div>
 
@@ -552,7 +552,7 @@ export default function OrderTrayModal({
                     <select
                       value={serviceType}
                       onChange={(e) => setServiceType(e.target.value)}
-                      className="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#a61c1c] text-stone-900 font-medium"
+                      className="w-full px-3 py-2.5 min-h-[42px] bg-stone-50 border border-stone-200 rounded-xl text-base sm:text-xs focus:outline-none focus:border-[#a61c1c] text-stone-900 font-medium"
                     >
                       <option value="Nasi Kotak / Pesan Antar">Nasi Kotak / Pesan Antar ke Alamat Kantor/Rumah</option>
                       <option value="Bungkus Sendiri (Takeaway)">Bungkus Bawa Pulang (Ambil di Outlet)</option>
@@ -569,7 +569,7 @@ export default function OrderTrayModal({
                       placeholder="Contoh: Sambal ijo dipisah, kuah gulai dibanyakin"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      className="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#a61c1c] text-stone-900"
+                      className="w-full px-3 py-2.5 min-h-[42px] bg-stone-50 border border-stone-200 rounded-xl text-base sm:text-xs focus:outline-none focus:border-[#a61c1c] text-stone-900"
                     />
                   </div>
                 </div>
@@ -1144,7 +1144,7 @@ export default function OrderTrayModal({
         </div>
 
         {/* ================= FOOTER / STICKY ACTION BAR ================= */}
-        <footer className="bg-white border-t border-stone-200 p-4 shrink-0 shadow-lg">
+        <footer className="bg-white border-t border-stone-200 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shrink-0 shadow-lg">
           
           {/* Cart Step Footer (Shopee style sticky checkout bar) */}
           {step === 'cart' && (

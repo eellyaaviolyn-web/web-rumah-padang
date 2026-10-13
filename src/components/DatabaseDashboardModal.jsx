@@ -82,18 +82,18 @@ export default function DatabaseDashboardModal({ isOpen, onClose, onOpenAdmin })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-sm animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-sm animate-fadeIn">
       <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl border border-[#d6cbbe]">
         
         {/* Header */}
-        <div className="bg-[#18100c] text-white p-5 flex items-center justify-between border-b border-[#3b271d]">
+        <div className="bg-[#18100c] text-white p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-[#3b271d]">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[#2a170f] border border-[#523829] text-[#c59837]">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-[#2a170f] border border-[#523829] text-[#c59837] shrink-0">
               <Database className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-serif font-bold text-base text-[#fbf6ec]">Dashboard Database {dbMeta.engine}</h3>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="font-serif font-bold text-sm sm:text-base text-[#fbf6ec]">Dashboard Database {dbMeta.engine}</h3>
                 <span className="text-[10px] font-mono px-2 py-0.5 bg-emerald-900/60 text-emerald-400 border border-emerald-700/50 rounded font-semibold">
                   Tugas Praktik SMK
                 </span>
@@ -104,27 +104,28 @@ export default function DatabaseDashboardModal({ isOpen, onClose, onOpenAdmin })
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-end sm:self-auto">
             <button
               onClick={handleSimulateOrder}
               disabled={simulating}
-              className="px-3 py-1.5 bg-[#a61c1c] hover:bg-[#881414] text-white rounded-lg transition flex items-center gap-1.5 text-xs font-semibold shadow"
+              className="px-2.5 sm:px-3 py-1.5 min-h-[36px] bg-[#a61c1c] hover:bg-[#881414] text-white rounded-lg transition flex items-center gap-1.5 text-xs font-semibold shadow active:scale-95"
               title="Kirim 1 transaksi uji coba untuk membuktikan SQLite bekerja realtime"
             >
               <PlusCircle className="w-3.5 h-3.5" />
-              <span>{simulating ? 'Menyimpan...' : '+ Simulasi Uji Transaksi'}</span>
+              <span className="hidden sm:inline">{simulating ? 'Menyimpan...' : '+ Simulasi Uji Transaksi'}</span>
+              <span className="sm:hidden">{simulating ? 'Menyimpan...' : '+ Simulasi'}</span>
             </button>
             <button
               onClick={fetchData}
               disabled={loading}
-              className="p-1.5 text-[#c59837] hover:text-white rounded-lg hover:bg-white/10 transition flex items-center gap-1 text-xs"
+              className="p-2 min-h-[36px] text-[#c59837] hover:text-white rounded-lg hover:bg-white/10 transition flex items-center gap-1 text-xs active:scale-95"
               title="Refresh Data"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             </button>
             <button 
               onClick={onClose}
-              className="p-1.5 text-[#918175] hover:text-white rounded-lg hover:bg-white/10 transition"
+              className="p-2 min-h-[36px] text-[#918175] hover:text-white rounded-lg hover:bg-white/10 transition active:scale-95"
             >
               <X className="w-5 h-5" />
             </button>

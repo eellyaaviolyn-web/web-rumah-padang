@@ -60,7 +60,7 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin }) {
           <button
             type="button"
             onClick={onOpenTray}
-            className="relative flex items-center gap-2 px-3 sm:px-3.5 py-2 min-h-[40px] rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white transition active:scale-95 cursor-pointer group"
+            className="relative flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 min-h-[44px] rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white transition active:scale-95 cursor-pointer group"
             title="Buka Keranjang / Nampan Pesanan"
             aria-label="Keranjang Pesanan"
           >
@@ -73,7 +73,8 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin }) {
               )}
             </div>
             <span className="text-[11px] sm:text-xs font-semibold tracking-wider uppercase">
-              Keranjang {totalQty > 0 ? `(${totalQty})` : ''}
+              <span className="hidden sm:inline">Keranjang </span>
+              {totalQty > 0 ? `(${totalQty})` : ''}
             </span>
           </button>
 
@@ -82,7 +83,7 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin }) {
             href="https://wa.me/6285147413866?text=Halo%20Masakan%20Padang%20ID,%20saya%20ingin%20bertanya%20menu%20dan%20pesanan."
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:flex items-center gap-2 bg-[#b59261] hover:bg-[#a07f50] text-white px-4 sm:px-5 py-2 rounded-full font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition whitespace-nowrap active:scale-95"
+            className="hidden md:flex items-center gap-2 bg-[#b59261] hover:bg-[#a07f50] text-white px-4 sm:px-5 py-2 min-h-[44px] rounded-full font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition whitespace-nowrap active:scale-95"
           >
             <Phone className="w-3.5 h-3.5" />
             <span>Hubungi Kasir</span>
@@ -101,7 +102,7 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin }) {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-[#140e0b]/95 backdrop-blur-md text-white p-5 space-y-4 border-b border-white/10 shadow-2xl animate-fadeIn">
+        <div className="xl:hidden bg-[#140e0b]/98 backdrop-blur-lg text-white p-5 space-y-4 border-b border-white/10 shadow-2xl animate-fadeIn">
           
           {/* Quick Cart Shortcut on Mobile Drawer */}
           <div className="pb-3 border-b border-white/10">
@@ -110,20 +111,31 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin }) {
                 setMobileMenuOpen(false);
                 onOpenTray();
               }}
-              className="w-full flex items-center justify-center gap-2 p-3 bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl text-xs font-bold text-white transition cursor-pointer"
+              className="w-full min-h-[44px] flex items-center justify-center gap-2 p-3 bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl text-xs font-bold text-white transition cursor-pointer active:scale-98"
             >
               <ShoppingBag className="w-4 h-4 text-[#e5be82]" />
               <span>Buka Nampan Pesanan {totalQty > 0 ? `(${totalQty} Porsi)` : '(Kosong)'}</span>
             </button>
           </div>
 
-          <nav className="flex flex-col space-y-3 text-xs sm:text-sm font-semibold tracking-wide uppercase">
-            <a href="#beranda" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#e5be82] text-stone-200">Beranda</a>
-            <a href="#tentang" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#e5be82] text-stone-200">Dapur & Tradisi</a>
-            <a href="#menu" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#e5be82] text-stone-200">Katalog Menu & Harga</a>
-            <a href="#nasibox" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#e5be82] text-stone-200">Paket Nasi Kotak Kantor</a>
-            <a href="#lacak" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#e5be82] text-stone-200">Lacak Status Pesanan</a>
-            <a href="#outlet" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#e5be82] text-stone-200">Cabang Outlet Terdekat</a>
+          <nav className="flex flex-col space-y-1 text-xs sm:text-sm font-semibold tracking-wide uppercase">
+            {[
+              { label: 'Beranda', href: '#beranda' },
+              { label: 'Dapur & Tradisi', href: '#tentang' },
+              { label: 'Katalog Menu & Harga', href: '#menu' },
+              { label: 'Paket Nasi Kotak Kantor', href: '#nasibox' },
+              { label: 'Lacak Status Pesanan', href: '#lacak' },
+              { label: 'Cabang Outlet Terdekat', href: '#outlet' },
+            ].map((link, idx) => (
+              <a
+                key={idx}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2.5 px-3 min-h-[44px] flex items-center rounded-lg hover:bg-white/10 hover:text-[#e5be82] text-stone-200 transition active:scale-98"
+              >
+                {link.label}
+              </a>
+            ))}
           </nav>
 
           <div className="pt-2 border-t border-white/10 space-y-2">
@@ -131,7 +143,7 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin }) {
               href="https://wa.me/6285147413866?text=Halo%20Masakan%20Padang%20ID,%20saya%20ingin%20bertanya%20menu%20dan%20pesanan."
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 bg-[#b59261] hover:bg-[#a07f50] text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow transition"
+              className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-[#b59261] hover:bg-[#a07f50] text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider shadow transition active:scale-98"
             >
               <Phone className="w-4 h-4" />
               <span>Hubungi Kasir (0851-4741-3866)</span>

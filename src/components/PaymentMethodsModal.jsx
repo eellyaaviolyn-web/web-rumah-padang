@@ -52,19 +52,19 @@ export default function PaymentMethodsModal({ isOpen, onClose, onOpenTray }) {
       <div className="bg-[#120d0a] text-stone-100 rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl border border-white/15">
         
         {/* Header Modal */}
-        <div className="bg-[#18100c] px-6 py-4.5 flex items-center justify-between border-b border-white/10 shrink-0">
+        <div className="bg-[#18100c] px-4 sm:px-6 py-3.5 sm:py-4.5 flex items-center justify-between border-b border-white/10 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#caa268]/20 border border-[#caa268]/40 flex items-center justify-center text-[#e5be82]">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#caa268]/20 border border-[#caa268]/40 flex items-center justify-center text-[#e5be82] shrink-0">
               <CreditCard className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-serif font-bold text-lg text-white">Metode Pembayaran Resmi</h3>
+                <h3 className="font-serif font-bold text-base sm:text-lg text-white">Metode Pembayaran Resmi</h3>
                 <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-800/80 px-2 py-0.5 rounded-full">
                   100% Aman
                 </span>
               </div>
-              <p className="text-xs text-stone-400">Masakan Padang ID • Bebas Biaya Admin & Terverifikasi Otomatis</p>
+              <p className="text-[11px] sm:text-xs text-stone-400">Masakan Padang ID • Bebas Biaya Admin & Terverifikasi Otomatis</p>
             </div>
           </div>
 
@@ -78,7 +78,7 @@ export default function PaymentMethodsModal({ isOpen, onClose, onOpenTray }) {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center gap-1.5 p-3 px-6 bg-[#0c0806] border-b border-white/10 overflow-x-auto no-scrollbar shrink-0">
+        <div className="flex items-center gap-1.5 p-2.5 sm:p-3 px-4 sm:px-6 bg-[#0c0806] border-b border-white/10 overflow-x-auto no-scrollbar scrollbar-none shrink-0">
           {[
             { id: 'qris', label: 'QRIS Nasional', icon: QrCode, badge: 'Paling Cepat' },
             { id: 'transfer', label: 'Transfer Bank', icon: CreditCard, count: '3 Bank' },
@@ -91,7 +91,7 @@ export default function PaymentMethodsModal({ isOpen, onClose, onOpenTray }) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer min-h-[40px] active:scale-95 ${
                   isActive
                     ? 'bg-[#b59261] text-white shadow-md'
                     : 'bg-white/5 text-stone-300 hover:bg-white/10 hover:text-white border border-white/5'
@@ -112,15 +112,15 @@ export default function PaymentMethodsModal({ isOpen, onClose, onOpenTray }) {
         </div>
 
         {/* Content Body */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1 text-xs">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-5 sm:space-y-6 flex-1 text-xs">
           
           {/* TAB 1: QRIS */}
           {activeTab === 'qris' && (
             <div className="space-y-5 animate-fadeIn">
-              <div className="bg-gradient-to-br from-[#1c140f] to-[#251912] p-5 rounded-2xl border border-white/10 flex flex-col md:flex-row items-center gap-6">
+              <div className="bg-gradient-to-br from-[#1c140f] to-[#251912] p-4 sm:p-5 rounded-2xl border border-white/10 flex flex-col md:flex-row items-center gap-5 sm:gap-6">
                 
                 {/* QR Code Container */}
-                <div className="bg-white p-4 rounded-2xl shadow-xl flex flex-col items-center shrink-0 w-48 text-slate-900 border-2 border-stone-300">
+                <div className="bg-white p-3.5 sm:p-4 rounded-2xl shadow-xl flex flex-col items-center shrink-0 w-44 sm:w-48 text-slate-900 border-2 border-stone-300">
                   <div className="flex items-center justify-between w-full pb-2 mb-2 border-b border-stone-200">
                     <span className="font-extrabold text-sm tracking-tight">QRIS</span>
                     <span className="text-[9px] font-mono font-bold text-red-600 uppercase">GPN</span>

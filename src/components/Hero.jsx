@@ -36,7 +36,7 @@ export default function Hero() {
       {/* HERO SECTION WITH RUMAH GADANG BACKGROUND */}
       <section
         ref={containerRef}
-        className="relative min-h-[75dvh] sm:min-h-[85vh] flex items-center justify-center text-center px-4 sm:px-8 md:px-12 py-16 sm:py-28 md:py-32 overflow-hidden"
+        className="relative min-h-[70dvh] sm:min-h-[85vh] flex items-center justify-center text-center px-4 sm:px-8 md:px-12 py-12 sm:py-24 md:py-32 overflow-hidden"
       >
         {/* Rumah Gadang Background with Parallax */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -55,7 +55,7 @@ export default function Hero() {
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center">
           
           {/* Big Editorial Heading */}
-          <h1 className="gsap-hero-heading font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-normal text-white leading-[1.12] sm:leading-[1.08] tracking-tight drop-shadow-xl max-w-4xl break-words">
+          <h1 className="gsap-hero-heading font-serif text-2xl xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal text-white leading-tight sm:leading-[1.08] tracking-tight drop-shadow-xl max-w-4xl break-words">
             Warisan Cita Rasa Minang, <br />
             <span className="italic font-serif text-transparent bg-clip-text bg-gradient-to-r from-[#ffe8b3] via-[#f5d796] to-[#caa268] drop-shadow-md">
               Dihidangkan dengan Kemewahan Tradisi.
@@ -63,21 +63,21 @@ export default function Hero() {
           </h1>
 
           {/* Lead Body Paragraph */}
-          <p className="gsap-hero-body text-stone-200/90 text-xs sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed mt-4 sm:mt-6 font-normal drop-shadow">
+          <p className="gsap-hero-body text-stone-200/90 text-xs sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed mt-4 sm:mt-6 font-normal drop-shadow px-1 sm:px-0">
             Menghadirkan keaslian kuliner Minangkabau tanpa kompromi. Daging sapi pilihan direduksi perlahan selama 8 jam bersama 16 racikan rempah Bukittinggi dan santan kelapa tua murni, menghadirkan aroma karamelisasi gurih nan legendaris.
           </p>
 
           {/* Responsive Mobile CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center gap-3 mt-6 sm:mt-8 w-full sm:w-auto px-4 sm:px-0">
+          <div className="flex flex-col sm:flex-row items-center gap-3 mt-6 sm:mt-8 w-full sm:w-auto px-2 sm:px-0">
             <a
               href="#menu"
-              className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-[#b59261] to-[#997746] hover:from-[#c59e6c] hover:to-[#a9844f] text-white rounded-full font-bold text-xs uppercase tracking-widest shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
+              className="w-full sm:w-auto px-7 py-3.5 min-h-[44px] bg-gradient-to-r from-[#b59261] to-[#997746] hover:from-[#c59e6c] hover:to-[#a9844f] text-white rounded-full font-bold text-xs uppercase tracking-widest shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
             >
               <span>Jelajahi Menu Porsi</span>
             </a>
             <a
               href="#nasibox"
-              className="w-full sm:w-auto px-7 py-3.5 bg-white/10 hover:bg-white/15 border border-white/20 text-white rounded-full font-semibold text-xs uppercase tracking-widest backdrop-blur-xs transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
+              className="w-full sm:w-auto px-7 py-3.5 min-h-[44px] bg-white/10 hover:bg-white/15 border border-white/20 text-white rounded-full font-semibold text-xs uppercase tracking-widest backdrop-blur-xs transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
             >
               <span>Paket Nasi Kotak</span>
             </a>

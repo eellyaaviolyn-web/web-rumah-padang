@@ -59,17 +59,17 @@ export default function MenuCatalog({ menuItems, onAddToTray, loading }) {
   }, [activeCategory, searchQuery, filteredItems.length]);
 
   return (
-    <section ref={containerRef} id="menu" className="py-16 md:py-24 px-4 sm:px-8 bg-white border-b border-[#eee5d8]">
+    <section ref={containerRef} id="menu" className="py-12 sm:py-16 md:py-24 px-4 sm:px-8 bg-white border-b border-[#eee5d8]">
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
-        <div className="gsap-menu-header flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+        <div className="gsap-menu-header flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-10">
           <div>
             <div className="text-xs font-bold uppercase tracking-widest text-[#a61c1c] mb-2 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#a61c1c]" />
               Katalog Hidangan Harian Resmi
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#19120e]">
+            <h2 className="font-serif text-2xl sm:text-4xl font-bold text-[#19120e]">
               Daftar Menu & Harga Porsi Terkalibrasi
             </h2>
             <p className="text-xs sm:text-sm text-[#7d7065] mt-1">
@@ -85,21 +85,21 @@ export default function MenuCatalog({ menuItems, onAddToTray, loading }) {
               placeholder="Cari lauk (contoh: Rendang, Pop)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#fbf9f5] border border-[#e8ded2] rounded-xl text-xs text-[#19120e] focus:outline-none focus:border-[#a61c1c] focus:ring-1 focus:ring-[#a61c1c] transition"
+              className="w-full pl-10 pr-4 py-2.5 min-h-[44px] bg-[#fbf9f5] border border-[#e8ded2] rounded-xl text-xs sm:text-xs text-[#19120e] focus:outline-none focus:border-[#a61c1c] focus:ring-1 focus:ring-[#a61c1c] transition"
             />
           </div>
         </div>
 
         {/* Category Tabs (Reflow Smooth Touch Horizontal Scroll on Mobile) */}
-        <div className="gsap-cat-tabs flex items-center gap-2 overflow-x-auto pb-4 mb-8 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none touch-pan-x">
-          <span className="text-xs font-bold text-[#918175] mr-2 flex items-center gap-1 shrink-0">
+        <div className="gsap-cat-tabs flex items-center gap-2 overflow-x-auto pb-3 mb-6 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none no-scrollbar touch-pan-x">
+          <span className="text-xs font-bold text-[#918175] mr-1 flex items-center gap-1 shrink-0">
             <Filter className="w-3.5 h-3.5" /> Kategori:
           </span>
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer min-h-[40px] active:scale-95 ${
+              className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer min-h-[42px] active:scale-95 ${
                 activeCategory === cat
                   ? 'bg-[#a61c1c] text-white shadow-md shadow-red-900/20'
                   : 'bg-[#fbf9f5] text-[#5c4e43] border border-[#e8ded2] hover:bg-[#f4efe6]'
@@ -123,18 +123,18 @@ export default function MenuCatalog({ menuItems, onAddToTray, loading }) {
             <p className="text-xs text-[#7d7065] mt-1">Coba kata kunci pencarian lain atau pilih kategori Semua.</p>
           </div>
         ) : (
-          <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
             {filteredItems.map((item) => {
               const isAdded = addedAnimationId === item.id;
               const isOutOfStock = item.stok_status === 'Habis';
               return (
                 <div
                   key={item.id}
-                  className="gsap-menu-card bg-[#fcfbf9] border border-[#e8ded2] rounded-2xl p-5 hover:border-[#a61c1c] hover:shadow-lg transition-all flex flex-col justify-between group"
+                  className="gsap-menu-card bg-[#fcfbf9] border border-[#e8ded2] rounded-2xl p-4 sm:p-5 hover:border-[#a61c1c] hover:shadow-lg transition-all flex flex-col justify-between group"
                 >
                   <div>
                     {/* Visual Culinary Image Card */}
-                    <div className="h-44 rounded-xl overflow-hidden mb-4 relative border border-[#e8dfd3] bg-[#f7f3ec] group-hover:shadow-md transition">
+                    <div className="h-40 sm:h-44 rounded-xl overflow-hidden mb-3.5 sm:mb-4 relative border border-[#e8dfd3] bg-[#f7f3ec] group-hover:shadow-md transition">
                       <img
                         src={item.image_url || '/images/menu/rendang.jpg'}
                         alt={item.nama}
@@ -172,26 +172,26 @@ export default function MenuCatalog({ menuItems, onAddToTray, loading }) {
                     <div className="text-[10px] font-bold uppercase tracking-wider text-[#918175] mb-1">
                       {item.kategori}
                     </div>
-                    <h3 className="font-bold text-base text-[#19120e] leading-snug group-hover:text-[#a61c1c] transition">
+                    <h3 className="font-bold text-sm sm:text-base text-[#19120e] leading-snug group-hover:text-[#a61c1c] transition">
                       {item.nama}
                     </h3>
-                    <p className="text-xs text-[#5c4e43] mt-2 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-[#5c4e43] mt-1.5 sm:mt-2 line-clamp-2 leading-relaxed">
                       {item.deskripsi}
                     </p>
                   </div>
 
                   {/* Price & Action */}
-                  <div className="pt-4 mt-4 border-t border-[#eee5d8] flex items-center justify-between">
+                  <div className="pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-[#eee5d8] flex items-center justify-between">
                     <div>
                       <div className="text-[10px] text-[#918175] uppercase">Harga / Porsi</div>
-                      <div className="text-base font-bold text-[#19120e]">
+                      <div className="text-sm sm:text-base font-bold text-[#19120e]">
                         Rp {item.harga.toLocaleString('id-ID')}
                       </div>
                     </div>
 
                     <button
                       onClick={() => handleAdd(item)}
-                      className={`px-3.5 py-2.5 min-h-[42px] min-w-[44px] rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer ${
+                      className={`px-3.5 py-2.5 min-h-[44px] min-w-[44px] rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer ${
                         isAdded
                           ? 'bg-emerald-600 text-white'
                           : 'bg-[#18100c] text-white hover:bg-[#a61c1c]'

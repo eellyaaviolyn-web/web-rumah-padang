@@ -428,7 +428,7 @@ export default function App() {
 
   // ================= VIEW: WEBSITE PELANGGAN / TAMU (/) =================
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcfbf9] text-[#19120e] pb-16 sm:pb-0">
+    <div className="min-h-screen flex flex-col bg-[#fcfbf9] text-[#19120e] pb-28 sm:pb-0">
       {/* 1. Navbar */}
       <Navbar 
         trayItems={trayItems}

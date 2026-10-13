@@ -25,16 +25,16 @@ export default function Footer({ onOpenDatabaseModal, onOpenAdmin }) {
   }, { scope: containerRef });
 
   return (
-    <footer ref={containerRef} className="bg-[#0f0a07] text-[#e8ded1] pt-16 pb-12 px-4 sm:px-8 border-t border-white/10">
+    <footer ref={containerRef} className="bg-[#0f0a07] text-[#e8ded1] pt-12 sm:pt-16 pb-12 px-4 sm:px-8 border-t border-white/10">
       <div className="max-w-6xl mx-auto">
         
         {/* Top Hospitality Callout Banner */}
-        <div className="mb-14 pb-12 border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="mb-10 pb-8 sm:mb-14 sm:pb-12 border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="max-w-xl">
             <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#caa268]">
               Pemesanan Acara & Nasi Kotak
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl text-white font-normal mt-1 leading-snug">
+            <h3 className="font-serif text-xl sm:text-3xl text-white font-normal mt-1 leading-snug">
               Hadirkan Kelezatan Minang di Setiap Momen Istimewa Anda.
             </h3>
             <p className="text-stone-400 text-xs sm:text-sm mt-2 leading-relaxed">
@@ -42,19 +42,19 @@ export default function Footer({ onOpenDatabaseModal, onOpenAdmin }) {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full sm:w-auto">
             <a
               href="https://wa.me/6285147413866?text=Halo%20Masakan%20Padang%20ID,%20saya%20ingin%20memesan%20katering%20nasi%20kotak."
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 bg-[#b59261] hover:bg-[#a07f50] text-white rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
+              className="w-full sm:w-auto px-6 py-3 min-h-[44px] bg-[#b59261] hover:bg-[#a07f50] text-white rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 active:scale-98"
             >
               <Phone className="w-3.5 h-3.5" />
               <span>Konsultasi Pesanan</span>
             </a>
             <a
               href="#nasibox"
-              className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/15 text-white rounded-full font-semibold text-xs uppercase tracking-wider transition-all duration-300 backdrop-blur-xs"
+              className="w-full sm:w-auto px-6 py-3 min-h-[44px] bg-white/5 hover:bg-white/10 border border-white/15 text-white rounded-full font-semibold text-xs uppercase tracking-wider transition-all duration-300 backdrop-blur-xs flex items-center justify-center active:scale-98"
             >
               Lihat Pilihan Menu
             </a>
@@ -62,7 +62,7 @@ export default function Footer({ onOpenDatabaseModal, onOpenAdmin }) {
         </div>
 
         {/* Main Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 md:gap-10 pb-12 border-b border-white/10">
           
           {/* Col 1: Brand & Identity (5 cols) */}
           <div className="gsap-footer-col md:col-span-5 space-y-4">
